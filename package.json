@@ -1,0 +1,22 @@
+{
+  "name": "team-643-alps-1",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ofAiden/Team-643-ALPS.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/ofAiden/Team-643-ALPS/issues"
+  },
+  "homepage": "https://github.com/ofAiden/Team-643-ALPS#readme",
+  "description": ""
+}
