@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom"; // ✅ Import Link
+import Tiredness from "../Tiredness";
+import Checkbox from "../Checkbox";
 
 const Notes = () => {
+    // Note Logging
     const [notes, setNotes] = useState([]);
 
     useEffect(() => {
@@ -23,7 +26,6 @@ const Notes = () => {
         fetchAllNotes();
     }, []);
     
-
     const handleDelete = async (id) => {
         try {
             await axios.delete(`http://localhost:8800/notes/${id}`);
@@ -33,9 +35,21 @@ const Notes = () => {
         }
     };
 
+    // Boolean (checkbox) inputs
+    const [checkboxes, setCheckboxes] = useState({
+        sick: false,
+        highTemp: false,
+        exercise: false,
+        headache: false,
+        troubleBreathing: false
+    });
+    const handleCheckboxChange = (name, value) => {
+        setCheckboxes(prev => ({...prev, [name]: value}));
+    };
+
     return (
         <div>
-            <h1>Notes</h1>
+            <h1>Daily Log (keep)</h1>
             {notes.map((note) => ( // ✅ Moved key inside .map()
                 <div className="note" key={note.id}>
                     <h2>{note.title}</h2>
@@ -49,6 +63,34 @@ const Notes = () => {
             <button>
                 <Link to="/add">Add new note</Link>
             </button>
+
+            <Tiredness />
+            <Checkbox 
+                label="Sick" 
+                checked={checkboxes.sick} 
+                onChange={(val) => handleCheckboxChange("sick", val)}
+            />
+            <Checkbox 
+                label="High Temperature" 
+                checked={checkboxes.highTemp} 
+                onChange={(val) => handleCheckboxChange("highTemp", val)}
+            />
+            <Checkbox 
+                label="Exercise" 
+                checked={checkboxes.exercise} 
+                onChange={(val) => handleCheckboxChange("exercise", val)}
+            />
+            <Checkbox 
+                label="Headache" 
+                checked={checkboxes.headache} 
+                onChange={(val) => handleCheckboxChange("headache", val)}
+            />
+            <Checkbox 
+                label="Trouble Breathing" 
+                checked={checkboxes.troubleBreathing} 
+                onChange={(val) => handleCheckboxChange("troubleBreathing", val)}
+            />
+            
         </div>
     );
 };
