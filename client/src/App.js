@@ -1,5 +1,5 @@
 import './App.css';
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+// import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import { DailyLog } from './pages/DailyLog';
 import { NotesPage } from './pages/NotesPage';
 import { DoctorQuestions } from './pages/DoctorQsPage';
@@ -9,7 +9,7 @@ import {useState} from 'react';
 import React from 'react';
 import Logger from './Logger'; // Adjust the path based on your folder structure
 import Dropdown from './Dropdown'; // Same here
-// import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 import Notes from "./pages/Notes"
 import Add from "./pages/Add"
 import Update from "./pages/Update"
@@ -37,9 +37,14 @@ function App() {
 
   return (
     <div className="App">
-      <Router>
-        <Logger />
-        <Dropdown />
+      <Logger />
+      <Dropdown />
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element = {<Notes/>} />
+          <Route path="/add" element = {<Add/>} />
+          <Route path="/update/:id" element = {<Update/>} />
+        </Routes>
         <div>
           <Link to="/">Daily Log</Link>
           <Link to="/notes">Notes</Link>
@@ -54,7 +59,8 @@ function App() {
 
           <Route path="*" element={ <h1>Page not found</h1> } />
         </Routes>
-      </Router>
+      </BrowserRouter>
+      
 
       {/* <b>Experienced Today</b>
       {// Show which daily stats were experienced today
