@@ -1,6 +1,5 @@
 import './App.css';
 // import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
-import { DailyLog } from './pages/DailyLog';
 import { NotesPage } from './pages/NotesPage';
 import { DoctorQuestions } from './pages/DoctorQsPage';
 import { Medicine } from './pages/MedicinePage';
@@ -37,22 +36,18 @@ function App() {
 
   return (
     <div className="App">
-      <Logger />
-      <Dropdown />
       <BrowserRouter>
-        <Routes>
-          <Route path="/" element = {<Notes/>} />
-          <Route path="/add" element = {<Add/>} />
-          <Route path="/update/:id" element = {<Update/>} />
-        </Routes>
-        <div>
+        <div> {/* navigation bar */}
           <Link to="/">Daily Log</Link>
           <Link to="/notes">Notes</Link>
           <Link to="/medicine">Medicine</Link>
           <Link to="/doctorquestions">Doctor Questions</Link>
         </div>
+
         <Routes>
-          <Route path="/" element={<DailyLog />} />
+          <Route path="/" element = {<Notes/>} />
+          <Route path="/add" element = {<Add/>} />
+          <Route path="/update/:id" element = {<Update/>} />
           <Route path="/notes" element={<NotesPage />} />
           <Route path="/medicine" element={<Medicine />} />
           <Route path="/doctorquestions" element={<DoctorQuestions />} />

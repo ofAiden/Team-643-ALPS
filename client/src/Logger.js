@@ -21,11 +21,11 @@ export default function Logger() {
     }
   };
 
-  const Clear = () => {
-    if (setLogs != null) {
-      setLogs([]);
-    }
-  };
+  // const Clear = () => {
+  //   if (setLogs != null) {
+  //     setLogs([]);
+  //   }
+  // };
 
   return (
     <div>
@@ -34,8 +34,8 @@ export default function Logger() {
         onChange={(e) => setText(e.target.value)}
         placeholder="Enter log message"
       />
-      <button onClick={Submit}>Submit</button>
-      <button onClick={Clear}>Clear</button>
+      <button onClick={Submit}>Submit Memo</button>
+      {/* <button onClick={Clear}>Clear</button> */}
       <div>
         {logs.length === 0 ? (
           <p>No logs yet</p>
