@@ -27,6 +27,14 @@ app.get("/notes", (req, res) => {
     });
 });
 
+app.get("/daily_log", (req, res) => {
+    const q = "SELECT * FROM daily_log";
+    db.query(q, (err, data) => {
+        if (err) return res.json(err);
+        return res.json(data);
+    });
+});
+
 // Create a new note
 app.post("/notes", (req, res) => {
     const q = "INSERT INTO notes (title, content) VALUES (?)";
@@ -40,6 +48,28 @@ app.post("/notes", (req, res) => {
         console.log(err);
         if (err) return res.json(err);
         return res.json("Note has been created successfully");
+    });
+});
+
+app.post("/daily_log", (req, res) => {
+    const q = "INSERT INTO daily_log (tired, sick, high_temperature, exercise, headache, chestpain, trouble_breathing) VALUES (?, ?, ?, ?, ?, ?, ?)";
+
+    const values = [
+        parseInt(req.body.tired, 10),
+        parseInt(req.body.sick, 10),
+        parseInt(req.body.high_temperature, 10),
+        parseInt(req.body.exercise, 10),
+        parseInt(req.body.headache, 10),
+        parseInt(req.body.chestpain, 10),
+        parseInt(req.body.trouble_breathing, 10)
+    ];
+    
+    db.query(q, values, (err, data) => {
+        if (err) {
+            console.error("Database Error:", err);
+            return res.status(500).json(err);
+        }
+        return res.json("Successfully logged");
     });
 });
 
@@ -68,7 +98,6 @@ app.put("/notes/:id", (req, res) => {
         return res.json("Note has been updated successfully.");
     });
 });
-
 // Start the server on port 8800
 app.listen(8800, () => {
     console.log("listening on http://localhost:8800");
