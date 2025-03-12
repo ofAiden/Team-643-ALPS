@@ -1,6 +1,6 @@
 import './App.css';
 // import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
-import { NotesPage } from './pages/NotesPage';
+import { ViewNotes } from './pages/ViewNotes';
 import { DoctorQuestions } from './pages/DoctorQsPage';
 import { Medicine } from './pages/MedicinePage';
 import {useState} from 'react';
@@ -9,8 +9,8 @@ import React from 'react';
 import Logger from './Logger'; // Adjust the path based on your folder structure
 import Dropdown from './Dropdown'; // Same here
 import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
-import Notes from "./pages/Notes"
-import Add from "./pages/Add"
+import DailyLog from "./pages/DailyLog"
+import AddMemo from "./pages/AddMemo"
 import Update from "./pages/Update"
 
 function App() {
@@ -45,10 +45,10 @@ function App() {
         </div>
 
         <Routes>
-          <Route path="/" element = {<Notes/>} />
-          <Route path="/add" element = {<Add/>} />
+          <Route path="/" element = {<DailyLog/>} />
+          <Route path="/add" element = {<AddMemo/>} />
           <Route path="/update/:id" element = {<Update/>} />
-          <Route path="/notes" element={<NotesPage />} />
+          <Route path="/notes" element={<ViewNotes />} />
           <Route path="/medicine" element={<Medicine />} />
           <Route path="/doctorquestions" element={<DoctorQuestions />} />
 

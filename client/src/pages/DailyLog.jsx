@@ -4,7 +4,7 @@ import { Link } from "react-router-dom"; // ✅ Import Link
 import Tiredness from "../Tiredness";
 import Checkbox from "../Checkbox";
 
-const Notes = () => {
+const DailyLog = () => {
     // Note Logging
     const [notes, setNotes] = useState([]);
 
@@ -47,10 +47,15 @@ const Notes = () => {
         setCheckboxes(prev => ({...prev, [name]: value}));
     };
 
+    const handleSubmit = async e =>{
+        //not sure how to do this here
+        //want to send all daily log stats to database
+    }
+
     return (
         <div>
-            <h1>Daily Log (keep)</h1>
-            {notes.map((note) => ( // ✅ Moved key inside .map()
+            <h2>Record a note</h2>
+            {notes.map((note) => ( // Moved key inside .map()
                 <div className="note" key={note.id}>
                     <h2>{note.title}</h2>
                     <p>{note.content}</p>
@@ -63,6 +68,9 @@ const Notes = () => {
             <button>
                 <Link to="/add">Add new note</Link>
             </button>
+            
+            
+            <h1>Daily Log</h1>
 
             <Tiredness />
             <Checkbox 
@@ -90,9 +98,10 @@ const Notes = () => {
                 checked={checkboxes.troubleBreathing} 
                 onChange={(val) => handleCheckboxChange("troubleBreathing", val)}
             />
+            <button onClick = {handleSubmit}> Submit Daily Log </button>
             
         </div>
     );
 };
 
-export default Notes;
+export default DailyLog;
