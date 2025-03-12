@@ -38,7 +38,7 @@ function App() {
     <div className="App">
       <BrowserRouter>
         <div> {/* navigation bar */}
-          <Link to="/">Daily Log</Link>
+          <Link to="/daily_log">Daily Log</Link>
           <Link to="/notes">Notes</Link>
           <Link to="/medicine">Medicine</Link>
           <Link to="/doctorquestions">Doctor Questions</Link>
@@ -51,6 +51,9 @@ function App() {
           <Route path="/notes" element={<NotesPage />} />
           <Route path="/medicine" element={<Medicine />} />
           <Route path="/doctorquestions" element={<DoctorQuestions />} />
+          <Route path="/daily_log" element={<daily_log />} />
+          <Route path="/" element={<DoctorQuestions />} />
+
 
           <Route path="*" element={ <h1>Page not found</h1> } />
         </Routes>
