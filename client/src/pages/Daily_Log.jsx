@@ -1,10 +1,38 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { Link } from "react-router-dom";
+
+const DailyLog = () => {
+    // State to hold daily logs
+    const [logs, setLogs] = useState([]);
+
+    useEffect(() => {
+        const fetchDailyLogs = async () => {
+            try {
+                const res = await axios.get("http://localhost:8800/daily_log");
+                console.log("Backend Response:", res.data);
+                if (Array.isArray(res.data)) {
+                    setLogs(res.data);
+                } else {
+                    console.log("Unexpected response data:", res.data);
+                }
+            } catch (err) {
+                console.log("Error fetching logs:", err);
+            }
+        };
+
+        fetchDailyLogs();
+    }, []);
+
+    const handleDelete = async (id) => {
+        try {
+            await axios.delete(`http://localhost:8800/daily_log/${id}`);
+            setLogs(logs.filter((log) => log.id !== id));
 import { Link } from "react-router-dom"; // ✅ Import Link
 import Tiredness from "../Tiredness";
 import Checkbox from "../Checkbox";
 
-const Notes = () => {
+const DailyLog = () => {
     // Note Logging
     const [notes, setNotes] = useState([]);
 
@@ -35,6 +63,21 @@ const Notes = () => {
         }
     };
 
+    return (
+        <div>
+            <h1>Daily Log</h1>
+            {logs.map((log) => (
+                <div className="log-entry" key={log.id}>
+                    <p><strong>Tired:</strong> {log.tired ? "Yes" : "No"}</p>
+                    <p><strong>Sick:</strong> {log.sick ? "Yes" : "No"}</p>
+                    <p><strong>High Temperature:</strong> {log.high_temperature ? "Yes" : "No"}</p>
+                    <p><strong>Exercise:</strong> {log.exercise ? "Yes" : "No"}</p>
+                    <p><strong>Headache:</strong> {log.headache ? "Yes" : "No"}</p>
+                    <p><strong>Chest Pain:</strong> {log.chestpain ? "Yes" : "No"}</p>
+                    <p><strong>Trouble Breathing:</strong> {log.trouble_breathing ? "Yes" : "No"}</p>
+                    <button className="delete" onClick={() => handleDelete(log.id)}>Delete</button>
+                    <button className="update">
+                        <Link to={`/update/${log.id}`}>Update</Link>
     // Boolean (checkbox) inputs
     const [checkboxes, setCheckboxes] = useState({
         sick: false,
@@ -47,10 +90,15 @@ const Notes = () => {
         setCheckboxes(prev => ({...prev, [name]: value}));
     };
 
+    const handleSubmit = async e =>{
+        //not sure how to do this here
+        //want to send all daily log stats to database
+    }
+
     return (
         <div>
-            <h1>Daily Log (keep)</h1>
-            {notes.map((note) => ( // ✅ Moved key inside .map()
+            <h2>Record a note</h2>
+            {notes.map((note) => ( // Moved key inside .map()
                 <div className="note" key={note.id}>
                     <h2>{note.title}</h2>
                     <p>{note.content}</p>
@@ -61,8 +109,13 @@ const Notes = () => {
                 </div>
             ))}
             <button>
+                <Link to="/add">Add new entry</Link>
+            </button>
                 <Link to="/add">Add new note</Link>
             </button>
+            
+            
+            <h1>Daily Log</h1>
 
             <Tiredness />
             <Checkbox 
@@ -90,9 +143,10 @@ const Notes = () => {
                 checked={checkboxes.troubleBreathing} 
                 onChange={(val) => handleCheckboxChange("troubleBreathing", val)}
             />
+            <button onClick = {handleSubmit}> Submit Daily Log </button>
             
         </div>
     );
 };
 
-export default Notes;
+export default DailyLog;

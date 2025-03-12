@@ -1,11 +1,13 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import Dropdown from "../Dropdown"
 
-const Add = () =>{
-    const [note,setNote] = useState({
-        title:"",
-        content:"",
+const AddMemo = () =>{
+    const [note, setNote] = useState({
+        date: new Date().toISOString().split("T")[0],
+        type: "",
+        content:""
     });
 
     const navigate = useNavigate()
@@ -14,7 +16,7 @@ const Add = () =>{
         setNote(prev=>({...prev, [e.target.name]: e.target.value}));
     }
 
-    const handleClick = async e =>{
+    const handleNoteSubmit = async e =>{
         e.preventDefault()
         try{
             await axios.post("http://localhost:8800/notes", note)
@@ -28,21 +30,23 @@ const Add = () =>{
     return(
         <div className="form">
             <h1>Add New Note</h1>
+            <Dropdown></Dropdown>
             <input
             type = "text" 
             placeholder = "title" 
             onChange={handleChange} 
             name = "title"
             ></input>
+
             <input 
             type = "text" 
             placeholder = "content" 
             onChange={handleChange} 
             name = "content"
             ></input>
-            <button onClick = {handleClick}>Add</button>
+            <button onClick = {handleNoteSubmit}>Add Memo</button>
         </div>
     );
 };
 
-export default Add;
+export default AddMemo;
