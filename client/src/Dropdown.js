@@ -1,65 +1,39 @@
 import * as React from 'react';
 
 const App = () => {
-
- const [time, setTime] = React.useState('Morning');
-
- const handleTimeChange = (event) => {
-   setTime(event.target.value);
+  const [noteType, setType] = React.useState('Quick Note');
+  
+  const handleTypeChange = (event) => {
+   setType(event.target.value);
  };
-
+ 
  return (
-
-   <div>
-
-     <Dropdown
-
-       label="What is the time of day?"
-
-       options={[
-
-         { label: 'Morning', value: 'morning' },
-
-         { label: 'Afternoon', value: 'afternoon' },
-
-         { label: 'Night', value: 'night' },
-
-       ]}
-
-       value={time}
-
-       onChange={handleTimeChange}
-
-     />
-
-   </div>
-
+  <div>
+    <Dropdown
+    label="" //optional text to appear in front of dropdown
+    options={[
+      { label: 'Quick Note', value: 'quickNote' },
+      { label: 'Doctor Question', value: 'doctorQ' },
+      { label: 'Medicine', value: 'medicine' },
+    ]}
+    value={noteType}
+    onChange={handleTypeChange}
+    />
+  </div>
  );
-
 };
-
 export default App;
 
+
 const Dropdown = ({ label, value, options, onChange }) => {
-
- return (
-
-   <label>
-
-     {label}
-
-     <select value={value} onChange={onChange}>
-
-       {options.map((option) => (
-
-         <option value={option.value}>{option.label}</option>
-
-       ))}
-
-     </select>
-
-   </label>
-
- );
-
+  return (
+  <label>
+    {label}
+    <select value={value} onChange={onChange}>
+      {options.map((option) => (
+        <option value={option.value}> {option.label} </option>
+      ))}
+    </select>
+  </label>
+  );
 };
