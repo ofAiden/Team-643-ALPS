@@ -12,6 +12,7 @@ import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 import Notes from "./pages/Notes"
 import Add from "./pages/Add"
 import Update from "./pages/Update"
+import DailyLog from './pages/DailyLog';
 
 function App() {
   //Which things were experienced today
@@ -45,17 +46,16 @@ function App() {
         </div>
 
         <Routes>
-          <Route path="/" element = {<Notes/>} />
-          <Route path="/add" element = {<Add/>} />
-          <Route path="/update/:id" element = {<Update/>} />
+        <Routes>
+          <Route path="/" element={<Notes />} />
+          <Route path="/add" element={<Add />} />
+          <Route path="/update/:id" element={<Update />} />
           <Route path="/notes" element={<NotesPage />} />
           <Route path="/medicine" element={<Medicine />} />
           <Route path="/doctorquestions" element={<DoctorQuestions />} />
-          <Route path="/daily_log" element={<daily_log />} />
-          <Route path="/" element={<DoctorQuestions />} />
-
-
-          <Route path="*" element={ <h1>Page not found</h1> } />
+          <Route path="/daily_log" element={<DailyLog />} />
+          <Route path="/daily_log/add" element={<daily_log />} />
+          <Route path="*" element={<h1>Page not found</h1>} />
         </Routes>
       </BrowserRouter>
       
