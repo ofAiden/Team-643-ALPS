@@ -4,9 +4,10 @@ import axios from "axios";
 import Dropdown from "../Dropdown"
 
 const AddMemo = () =>{
-    const [note,setNote] = useState({
-        title:"",
-        content:"",
+    const [note, setNote] = useState({
+        date: new Date().toISOString().split("T")[0],
+        type: "",
+        content:""
     });
 
     const navigate = useNavigate()
@@ -15,7 +16,7 @@ const AddMemo = () =>{
         setNote(prev=>({...prev, [e.target.name]: e.target.value}));
     }
 
-    const handleClick = async e =>{
+    const handleNoteSubmit = async e =>{
         e.preventDefault()
         try{
             await axios.post("http://localhost:8800/notes", note)
@@ -43,7 +44,7 @@ const AddMemo = () =>{
             onChange={handleChange} 
             name = "content"
             ></input>
-            <button onClick = {handleClick}>Add Memo</button>
+            <button onClick = {handleNoteSubmit}>Add Memo</button>
         </div>
     );
 };
