@@ -100,9 +100,24 @@ const DailyLog = () => {
     };
 
     const handleSubmit = async e =>{
-        //not sure how to do this here
-        //want to send all daily log stats to database
-    }
+        e.preventDefault();
+
+        const dailyLogData = {
+            tired: checkboxes.tired,
+            sick: checkboxes.sick,
+            high_temperature: checkboxes.highTemp,
+            exercise: checkboxes.exercise,
+            headache: checkboxes.headache,
+            troubleBreathing: checkboxes.troubleBreathing
+        };
+
+        try{
+            await axios.post("http://localhost:8800/", dailyLogData);
+            console.log("daily log data submtited:", dailyLogData);
+        } catch (err) {
+            console.error("error submitting daily log: ", err)
+        }
+    };
 
     return (
         <div>
@@ -121,9 +136,28 @@ const DailyLog = () => {
                 <button>
                     <Link to="/add">Add new entry</Link>
                 </button>
-                <Link to="/add">Add new note</Link>
             </div>
-    
+
+            {/*what is this div below for*/}
+            <div>
+                <h1>Daily_Log</h1>
+                {notes.map((note) => (
+                    <div className="log-entry" key={note.id}>
+                        <p><strong>Tired:</strong> {note.tired ? "Yes" : "No"}</p>
+                        <p><strong>Sick:</strong> {note.sick ? "Yes" : "No"}</p>
+                        <p><strong>High Temperature:</strong> {note.high_temperature ? "Yes" : "No"}</p>
+                        <p><strong>Exercise:</strong> {note.exercise ? "Yes" : "No"}</p>
+                        <p><strong>Headache:</strong> {note.headache ? "Yes" : "No"}</p>
+                        <p><strong>Chest Pain:</strong> {note.chestpain ? "Yes" : "No"}</p>
+                        <p><strong>Trouble Breathing:</strong> {note.trouble_breathing ? "Yes" : "No"}</p>
+                        <button className="delete" onClick={() => handleDelete(note.id)}>Delete</button>
+                        <Link to={`/update/${note.id}`}>
+                            <button className="update">Update</button>
+                        </Link>
+                    </div>
+                ))}
+            </div>
+
             <div>
                 <h1>Daily Log</h1>
                 <Tiredness />
