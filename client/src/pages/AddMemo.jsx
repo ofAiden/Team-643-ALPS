@@ -33,9 +33,9 @@ const AddMemo = () =>{
             <Dropdown></Dropdown>
             <input
             type = "text" 
-            placeholder = "title" 
+            placeholder = "type" 
             onChange={handleChange} 
-            name = "title"
+            name = "type"
             ></input>
 
             <input 

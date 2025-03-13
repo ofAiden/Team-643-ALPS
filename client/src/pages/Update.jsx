@@ -4,7 +4,7 @@ import axios from 'axios'; // ✅ Import axios
 
 const Update = () => {
     const [note, setNote] = useState({
-        title: "",
+        type: "",
         content: "",
     });
 
@@ -33,10 +33,10 @@ const Update = () => {
             <h1>Update the Note</h1>
             <input
                 type="text"
-                placeholder="title"
+                placeholder="type"
                 onChange={handleChange}
-                name="title"
-                value={note.title} // ✅ Add value to bind state to input
+                name="tpe"
+                value={note.type} // ✅ Add value to bind state to input
             />
             <input
                 type="text"

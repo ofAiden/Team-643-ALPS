@@ -37,9 +37,9 @@ app.get("/daily_log", (req, res) => {
 
 // Create a new note
 app.post("/notes", (req, res) => {
-    const q = "INSERT INTO notes (title, content) VALUES (?)";
+    const q = "INSERT INTO notes (type, content) VALUES (?)";
     const values = [
-        req.body.title,
+        req.body.type,
         req.body.content,
     ];
     
@@ -87,9 +87,9 @@ app.delete("/notes/:id", (req, res) => {
 // Update a note
 app.put("/notes/:id", (req, res) => {
     const noteId = req.params.id;
-    const q = "UPDATE notes SET title = ?, content = ? WHERE id = ?";
+    const q = "UPDATE notes SET type = ?, content = ? WHERE id = ?";
     const values = [
-        req.body.title,
+        req.body.type,
         req.body.content,
     ];
 

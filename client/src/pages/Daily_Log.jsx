@@ -123,7 +123,6 @@ const DailyLog = () => {
                 <h2>Record a note</h2>
                 {notes.map((note) => (
                     <div className="note" key={note.id}>
-                        <h2>{note.title}</h2>
                         <p>{note.content}</p>
                         <button className="delete" onClick={() => handleDelete(note.id)}>Delete</button>
                         <button className="update">
