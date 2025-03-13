@@ -2,9 +2,9 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
-const DailyLog = () => {
+const AddDailyLog = () => {
     const [log, setLog] = useState({
-        tired: 0, // Can be 0-10
+        tired: 0, // Range 0-10
         sick: 0,
         high_temperature: 0,
         exercise: 0,
@@ -15,33 +15,34 @@ const DailyLog = () => {
 
     const navigate = useNavigate();
 
-    // Handle changes for "tired" (number 0-10)
+    // Handle changes for "tired" (dropdown)
     const handleTiredChange = (e) => {
         setLog(prev => ({ ...prev, tired: parseInt(e.target.value, 10) }));
     };
 
-    // Handle changes for checkboxes (0 or 1)
+    // Handle checkbox changes (0 or 1)
     const handleCheckboxChange = (e) => {
         const { name, checked } = e.target;
         setLog(prev => ({ ...prev, [name]: checked ? 1 : 0 }));
     };
 
-    // Submit form
-    const handleClick = async (e) => {
+    // Submit log to backend
+    const handleSubmit = async (e) => {
         e.preventDefault();
         try {
             await axios.post("http://localhost:8800/daily_log", log);
+            console.log("Submitted log:", log);
             navigate("/");
         } catch (err) {
-            console.log(err);
+            console.error("Error submitting log:", err);
         }
     };
 
     return (
         <div className="form">
-            <h1>Daily Log</h1>
+            <h1>Add Daily Log</h1>
 
-            {/* Tired - Select from 0 to 10 */}
+            {/* Tired Input (Dropdown 0-10) */}
             <div>
                 <label>Tired (0-10):</label>
                 <select name="tired" onChange={handleTiredChange} value={log.tired}>
@@ -51,7 +52,7 @@ const DailyLog = () => {
                 </select>
             </div>
 
-            {/* Checkboxes for other boolean fields */}
+            {/* Checkbox Inputs for Boolean Fields */}
             {["sick", "high_temperature", "exercise", "headache", "chestpain", "trouble_breathing"].map((key) => (
                 <div key={key}>
                     <label>
@@ -66,9 +67,9 @@ const DailyLog = () => {
                 </div>
             ))}
 
-            <button onClick={handleClick}>Submit Log</button>
+            <button onClick={handleSubmit}>Submit Log</button>
         </div>
     );
 };
 
-export default DailyLog;
+export default AddDailyLog;
