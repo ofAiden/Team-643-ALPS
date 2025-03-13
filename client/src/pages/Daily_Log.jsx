@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import Tiredness from "../Tiredness";
+import Checkbox from "../Checkbox";
 
-const DailyLog = () => {
+/*const DailyLog = () => {
     // State to hold daily logs
     const [logs, setLogs] = useState([]);
 
@@ -28,9 +30,8 @@ const DailyLog = () => {
         try {
             await axios.delete(`http://localhost:8800/daily_log/${id}`);
             setLogs(logs.filter((log) => log.id !== id));
-import { Link } from "react-router-dom"; // ✅ Import Link
-import Tiredness from "../Tiredness";
-import Checkbox from "../Checkbox";
+*/
+
 
 const DailyLog = () => {
     // Note Logging
@@ -63,7 +64,7 @@ const DailyLog = () => {
         }
     };
 
-    return (
+    /*return (
         <div>
             <h1>Daily Log</h1>
             {logs.map((log) => (
@@ -76,9 +77,17 @@ const DailyLog = () => {
                     <p><strong>Chest Pain:</strong> {log.chestpain ? "Yes" : "No"}</p>
                     <p><strong>Trouble Breathing:</strong> {log.trouble_breathing ? "Yes" : "No"}</p>
                     <button className="delete" onClick={() => handleDelete(log.id)}>Delete</button>
-                    <button className="update">
-                        <Link to={`/update/${log.id}`}>Update</Link>
-    // Boolean (checkbox) inputs
+                    <Link to={`/update/${log.id}`}>
+                        <button className="update">Update</button>
+                    </Link>
+                </div>
+            ))}
+        </div>
+    );
+    */
+
+
+    // Boolean (checkbox) inputs}
     const [checkboxes, setCheckboxes] = useState({
         sick: false,
         highTemp: false,
@@ -97,54 +106,54 @@ const DailyLog = () => {
 
     return (
         <div>
-            <h2>Record a note</h2>
-            {notes.map((note) => ( // Moved key inside .map()
-                <div className="note" key={note.id}>
-                    <h2>{note.title}</h2>
-                    <p>{note.content}</p>
-                    <button className="delete" onClick={() => handleDelete(note.id)}>Delete</button>
-                    <button className="update">
-                        <Link to={`/update/${note.id}`}>Update</Link> {/* ✅ Fixed template literal */}
-                    </button>
-                </div>
-            ))}
-            <button>
-                <Link to="/add">Add new entry</Link>
-            </button>
+            <div>
+                <h2>Record a note</h2>
+                {notes.map((note) => (
+                    <div className="note" key={note.id}>
+                        <h2>{note.title}</h2>
+                        <p>{note.content}</p>
+                        <button className="delete" onClick={() => handleDelete(note.id)}>Delete</button>
+                        <button className="update">
+                            <Link to={`/update/${note.id}`}>Update</Link>
+                        </button>
+                    </div>
+                ))}
+                <button>
+                    <Link to="/add">Add new entry</Link>
+                </button>
                 <Link to="/add">Add new note</Link>
-            </button>
-            
-            
-            <h1>Daily Log</h1>
-
-            <Tiredness />
-            <Checkbox 
-                label="Sick" 
-                checked={checkboxes.sick} 
-                onChange={(val) => handleCheckboxChange("sick", val)}
-            />
-            <Checkbox 
-                label="High Temperature" 
-                checked={checkboxes.highTemp} 
-                onChange={(val) => handleCheckboxChange("highTemp", val)}
-            />
-            <Checkbox 
-                label="Exercise" 
-                checked={checkboxes.exercise} 
-                onChange={(val) => handleCheckboxChange("exercise", val)}
-            />
-            <Checkbox 
-                label="Headache" 
-                checked={checkboxes.headache} 
-                onChange={(val) => handleCheckboxChange("headache", val)}
-            />
-            <Checkbox 
-                label="Trouble Breathing" 
-                checked={checkboxes.troubleBreathing} 
-                onChange={(val) => handleCheckboxChange("troubleBreathing", val)}
-            />
-            <button onClick = {handleSubmit}> Submit Daily Log </button>
-            
+            </div>
+    
+            <div>
+                <h1>Daily Log</h1>
+                <Tiredness />
+                <Checkbox 
+                    label="Sick" 
+                    checked={checkboxes.sick} 
+                    onChange={(val) => handleCheckboxChange("sick", val)}
+                />
+                <Checkbox 
+                    label="High Temperature" 
+                    checked={checkboxes.highTemp} 
+                    onChange={(val) => handleCheckboxChange("highTemp", val)}
+                />
+                <Checkbox 
+                    label="Exercise" 
+                    checked={checkboxes.exercise} 
+                    onChange={(val) => handleCheckboxChange("exercise", val)}
+                />
+                <Checkbox 
+                    label="Headache" 
+                    checked={checkboxes.headache} 
+                    onChange={(val) => handleCheckboxChange("headache", val)}
+                />
+                <Checkbox 
+                    label="Trouble Breathing" 
+                    checked={checkboxes.troubleBreathing} 
+                    onChange={(val) => handleCheckboxChange("troubleBreathing", val)}
+                />
+                <button onClick={handleSubmit}>Submit Daily Log</button>
+            </div>
         </div>
     );
 };
