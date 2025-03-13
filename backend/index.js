@@ -52,24 +52,17 @@ app.post("/notes", (req, res) => {
 });
 
 app.post("/daily_log", (req, res) => {
-    const q = "INSERT INTO daily_log (tired, sick, high_temperature, exercise, headache, chestpain, trouble_breathing) VALUES (?, ?, ?, ?, ?, ?, ?)";
+    const { tired, sick, high_temperature, exercise, headache, chestpain, trouble_breathing } = req.body;
 
-    const values = [
-        parseInt(req.body.tired, 10),
-        parseInt(req.body.sick, 10),
-        parseInt(req.body.high_temperature, 10),
-        parseInt(req.body.exercise, 10),
-        parseInt(req.body.headache, 10),
-        parseInt(req.body.chestpain, 10),
-        parseInt(req.body.trouble_breathing, 10)
-    ];
-    
-    db.query(q, values, (err, data) => {
+    const query = "INSERT INTO daily_log (tired, sick, high_temperature, exercise, headache, chestpain, trouble_breathing) VALUES (?, ?, ?, ?, ?, ?, ?)";
+    const values = [tired, sick, high_temperature, exercise, headache, chestpain, trouble_breathing];
+
+    db.query(query, values, (err, result) => {
         if (err) {
-            console.error("Database Error:", err);
-            return res.status(500).json(err);
+            console.error("Error inserting log:", err);
+            return res.status(500).json({ error: "Database error" });
         }
-        return res.json("Successfully logged");
+        res.status(200).json({ message: "Log added successfully", logId: result.insertId });
     });
 });
 
