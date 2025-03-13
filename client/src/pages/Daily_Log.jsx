@@ -32,7 +32,6 @@ import Checkbox from "../Checkbox";
             setLogs(logs.filter((log) => log.id !== id));
 */
 
-
 const DailyLog = () => {
     // Note Logging
     const [notes, setNotes] = useState([]);
@@ -85,7 +84,6 @@ const DailyLog = () => {
         </div>
     );
     */
-
 
     // Boolean (checkbox) inputs}
     const [checkboxes, setCheckboxes] = useState({
