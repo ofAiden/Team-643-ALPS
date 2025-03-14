@@ -36,6 +36,7 @@ const AddMemo = () =>{
             placeholder = "type" 
             onChange={handleChange} 
             name = "type"
+            value = {note.type}
             ></input>
 
             <input 
