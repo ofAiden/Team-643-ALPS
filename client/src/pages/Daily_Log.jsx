@@ -32,7 +32,7 @@ import Checkbox from "../Checkbox";
             setLogs(logs.filter((log) => log.id !== id));
 */
 
-const DailyLog = () => {
+const Daily_Log = () => {
     // Note Logging
     const [notes, setNotes] = useState([]);
 
@@ -110,7 +110,7 @@ const DailyLog = () => {
         };
 
         try{
-            await axios.post("http://localhost:8800/", dailyLogData);
+            await axios.post("http://localhost:8800/daily_log", dailyLogData);
             console.log("daily log data submtited:", dailyLogData);
         } catch (err) {
             console.error("error submitting daily log: ", err)
@@ -189,4 +189,4 @@ const DailyLog = () => {
     );
 };
 
-export default DailyLog;
+export default Daily_Log;

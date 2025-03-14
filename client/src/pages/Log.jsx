@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
-const DailyLog = () => {
+const Log = () => {
     const [log, setLog] = useState({
         tired: 0, // Can be 0-10
         sick: 0,
@@ -71,4 +71,4 @@ const DailyLog = () => {
     );
 };
 
-export default DailyLog;
+export default Log;
