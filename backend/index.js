@@ -2,21 +2,21 @@ import express from "express";
 import mysql from "mysql";
 import cors from "cors";
 import dotenv from "dotenv";
-dotenv.config();
+dotenv.config({ path: "./.env" });
 
 const app = express();
 
-// Database connection
 const db = mysql.createConnection({
-    host: process.env.DB_HOST,
-    user: process.env.DB_USER,
-    password: process.env.DB_PASS,
-    database: process.env.DB_NAME
+    host: 'localhost',     // Your MySQL host, 'localhost' if running locally
+    user: 'root',          // Your MySQL username
+    password: 'Aiden.0413',// Your MySQL password
+    database: 'notes_app'  // Your MySQL database name
 });
 
 app.use(express.json());
 app.use(cors());
 
+// Database connection
 db.connect((err) => {
     if (err) {
         console.error("Database connection failed:", err);
@@ -24,6 +24,7 @@ db.connect((err) => {
         console.log("Connected to MySQL database.");
     }
 });
+
 
 // Backend health check
 app.get("/", (req, res) => {
@@ -68,3 +69,4 @@ app.post("/daily_log", (req, res) => {
 app.listen(8800, () => {
     console.log("Backend running on http://localhost:8800");
 });
+

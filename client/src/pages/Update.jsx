@@ -35,7 +35,7 @@ const Update = () => {
                 type="text"
                 placeholder="type"
                 onChange={handleChange}
-                name="tpe"
+                name="type"
                 value={note.type} // ✅ Add value to bind state to input
             />
             <input
