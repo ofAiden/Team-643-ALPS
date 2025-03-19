@@ -1,6 +1,7 @@
 import './App.css';
 import React from 'react';
 import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
+import DailyLog from "./pages/Daily_Log";
 import AddMemo from "./pages/AddMemo";
 import Update from "./pages/Update";
 import { ViewNotes } from './pages/ViewNotes';
@@ -21,6 +22,7 @@ function App() {
         </div>
 
         <Routes>
+          <Route path="/" element={<DailyLog />} />
           <Route path="/add" element={<AddMemo />} />
           <Route path="/update/:id" element={<Update />} />
           <Route path="/notes" element={<ViewNotes />} />

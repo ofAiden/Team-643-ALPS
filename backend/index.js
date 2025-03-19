@@ -3,9 +3,11 @@ import mysql from "mysql";
 import cors from "cors";
 import dotenv from "dotenv";
 dotenv.config({ path: "./.env" });
+dotenv.config();
 
 const app = express();
 
+// Database connection
 const db = mysql.createConnection({
     host: 'localhost',     // Your MySQL host, 'localhost' if running locally
     user: 'root',          // Your MySQL username
@@ -24,7 +26,6 @@ db.connect((err) => {
         console.log("Connected to MySQL database.");
     }
 });
-
 
 // Backend health check
 app.get("/", (req, res) => {
