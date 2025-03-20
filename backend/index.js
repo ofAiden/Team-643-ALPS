@@ -66,6 +66,57 @@ app.post("/daily_log", (req, res) => {
     });
 });
 
+app.get("/notes", (req, res) => {
+    const q = "SELECT * FROM notes";
+    db.query(q, (err, data) => {
+        if (err) return res.json(err);
+        return res.json(data);
+    });
+});
+
+// Create a new note
+app.post("/notes", (req, res) => {
+    const q = "INSERT INTO notes (type, content) VALUES (?)";
+    const values = [
+        req.body.type,
+        req.body.content,
+    ];
+    
+    db.query(q, [values], (err, data) => {
+        console.log("Note has been sent to database");
+        console.log(err);
+        if (err) return res.json(err);
+        return res.json("Note has been created successfully");
+    });
+});
+
+// Delete a note
+app.delete("/notes/:id", (req, res) => {
+    const noteId = req.params.id;
+    const q = "DELETE FROM notes WHERE id = ?";
+
+    db.query(q, [noteId], (err, data) => {
+        if (err) return res.json(err);
+        return res.json("Note has been deleted successfully.");
+    });
+});
+
+// Update a note
+app.put("/notes/:id", (req, res) => {
+    const noteId = req.params.id;
+    const q = "UPDATE notes SET type = ?, content = ? WHERE id = ?";
+    const values = [
+        req.body.type,
+        req.body.content,
+    ];
+
+    db.query(q, [...values, noteId], (err, data) => {
+        if (err) return res.json(err);
+        return res.json("Note has been updated successfully.");
+    });
+});
+
+
 // Start server on port 8800
 app.listen(8800, () => {
     console.log("Backend running on http://localhost:8800");
