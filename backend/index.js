@@ -2,10 +2,12 @@ import express from "express";
 import mysql from "mysql";
 import cors from "cors";
 import dotenv from "dotenv";
-dotenv.config({ path: "./.env" });
-dotenv.config();
+// dotenv.config().parsed;
 
 const app = express();
+
+console.log("test");
+console.log(process.env.REACT_APP_TEST);
 
 // Database connection
 const db = mysql.createConnection({
