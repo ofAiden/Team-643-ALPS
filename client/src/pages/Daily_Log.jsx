@@ -137,7 +137,6 @@ const Daily_Log = () => {
 
             {/*what is this div below for*/}
             <div>
-                <h1>Daily_Log</h1>
                 {notes.map((note) => (
                     <div className="log-entry" key={note.id}>
                         <p><strong>Tired:</strong> {note.tired ? "Yes" : "No"}</p>

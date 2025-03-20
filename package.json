@@ -18,5 +18,9 @@
     "url": "https://github.com/ofAiden/Team-643-ALPS/issues"
   },
   "homepage": "https://github.com/ofAiden/Team-643-ALPS#readme",
-  "description": ""
+  "description": "",
+  "dependencies": {
+    "react-big-calendar": "^1.18.0",
+    "react-datepicker": "^8.2.1"
+  }
 }
