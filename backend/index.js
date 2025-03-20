@@ -2,7 +2,7 @@ import express from "express";
 import mysql from "mysql";
 import cors from "cors";
 import dotenv from "dotenv";
-// dotenv.config().parsed;
+dotenv.config().parsed;
 
 const app = express();
 
@@ -17,10 +17,13 @@ const db = mysql.createConnection({
     database: 'notes_app'  // Your MySQL database name
 });
 
-app.use(express.json());
-app.use(cors());
+//run this in mysql if authentication error is encountered:
+//ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'password';
 
-// Database connection
+app.use(express.json()); //allows you to send any json file using a client
+app.use(cors()); //prevent the issue of backend server preventing the application to use the backend api
+
+// // Database connection
 db.connect((err) => {
     if (err) {
         console.error("Database connection failed:", err);
@@ -29,7 +32,7 @@ db.connect((err) => {
     }
 });
 
-// Backend health check
+// Backend health check (when at "/" page of backend, gets request from user and sends response)
 app.get("/", (req, res) => {
     res.send("Backend is running!");
 });
@@ -39,7 +42,7 @@ app.get("/daily_log", (req, res) => {
     const query = "SELECT * FROM daily_log";
     db.query(query, (err, data) => {
         if (err) return res.status(500).json({ error: err.message });
-        return res.json(data);
+        return res.json(data); //if no error, returns data
     });
 });
 
@@ -55,16 +58,16 @@ app.post("/daily_log", (req, res) => {
         return res.status(400).json({ error: "Missing required fields" });
     }
 
-    // Insert the data into the database
+    // Insert the daily log data into the database
     const query = "INSERT INTO daily_log (tired, sick, high_temperature, exercise, headache, chestpain, trouble_breathing) VALUES (?, ?, ?, ?, ?, ?, ?)";
     const values = [tired, sick, high_temperature, exercise, headache, chestpain, trouble_breathing];
 
     db.query(query, values, (err, result) => {
         if (err) {
-            console.error("Error inserting log:", err);
+            console.error("Error inserting daily log:", err);
             return res.status(500).json({ error: "Database error" });
         }
-        res.status(200).json({ message: "Log added successfully", logId: result.insertId });
+        res.status(200).json({ message: "Daily Log added successfully", logId: result.insertId });
     });
 });
 
@@ -110,6 +113,7 @@ app.put("/notes/:id", (req, res) => {
     const values = [
         req.body.type,
         req.body.content,
+//we need date here right
     ];
 
     db.query(q, [...values, noteId], (err, data) => {

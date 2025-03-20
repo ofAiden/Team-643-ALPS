@@ -39,7 +39,7 @@ const Daily_Log = () => {
     useEffect(() => {
         const fetchAllNotes = async () => {
             try {
-                const res = await axios.get("http://localhost:8800/notes");
+                const res = await axios.get("http://localhost:8800/notes"); //is this supposed to say /daily_log instead of /notes
                 console.log('Backend Response:', res.data);  // Log the response data
                 if (Array.isArray(res.data)) {
                     setNotes(res.data);  // Set notes only if it's an array
@@ -56,7 +56,7 @@ const Daily_Log = () => {
     
     const handleDelete = async (id) => {
         try {
-            await axios.delete(`http://localhost:8800/notes/${id}`);
+            await axios.delete(`http://localhost:8800/notes/${id}`); //is this supposed to say /daily_log/
             setNotes(notes.filter((note) => note.id !== id));
         } catch (err) {
             console.log(err);
@@ -135,7 +135,6 @@ const Daily_Log = () => {
                 </button>
             </div>
 
-            {/*what is this div below for*/}
             <div>
                 {notes.map((note) => (
                     <div className="log-entry" key={note.id}>
@@ -146,9 +145,9 @@ const Daily_Log = () => {
                         <p><strong>Headache:</strong> {note.headache ? "Yes" : "No"}</p>
                         <p><strong>Chest Pain:</strong> {note.chestpain ? "Yes" : "No"}</p>
                         <p><strong>Trouble Breathing:</strong> {note.trouble_breathing ? "Yes" : "No"}</p>
-                        <button className="delete" onClick={() => handleDelete(note.id)}>Delete</button>
+                        <button className="delete" onClick={() => handleDelete(note.id)}>Delete Entry</button>
                         <Link to={`/update/${note.id}`}>
-                            <button className="update">Update</button>
+                            <button className="update">Update Entry</button>
                         </Link>
                     </div>
                 ))}

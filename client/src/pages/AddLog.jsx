@@ -23,19 +23,19 @@ const AddLog = () => {
     // Handle checkbox changes (set 1 if checked, 0 if unchecked)
     const handleCheckboxChange = (e) => {
         const { name, checked } = e.target;
-        setLog(prev => ({ ...prev, [name]: checked ? 1 : 0 })); // ✅ Set 1 for true, 0 for false
+        setLog(prev => ({ ...prev, [name]: checked ? 1 : 0 })); // 1 for true, 0 for false
     };
 
     // Submit log to backend
     const handleSubmit = async (e) => {
-        e.preventDefault();
+        e.preventDefault(); //does not automatically refresh page when button is clicked
 
         console.log("Form data to submit:", log); // Debugging before sending
 
         try {
             const response = await axios.post("http://localhost:8800/daily_log", log);
             console.log("Response from server:", response); // Debug: Verify server response
-            navigate("/"); // Redirect after submission
+            navigate("/"); // redirect to homepage after submitting log
         } catch (err) {
             console.error("Error submitting daily log:", err);
         }
