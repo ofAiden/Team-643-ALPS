@@ -4,6 +4,7 @@ import axios from "axios";
 
 const AddLog = () => {
     const [log, setLog] = useState({
+        date: new Date().toISOString().split('T')[0],
         tired: 0, // Range 0-10
         sick: 0,
         high_temperature: 0,
@@ -15,6 +16,11 @@ const AddLog = () => {
 
     const navigate = useNavigate();
 
+    // Handle changes for date field
+    const handleDateChange = (e) => {
+        setLog(prev => ({ ...prev, date: e.target.value}));
+    }
+    
     // Handle changes for "tired" (dropdown)
     const handleTiredChange = (e) => {
         setLog(prev => ({ ...prev, tired: parseInt(e.target.value, 10) }));
@@ -44,8 +50,10 @@ const AddLog = () => {
     return (
         <div className="form">
             <h1>Add Daily Log</h1>
-
+            
             <form onSubmit={handleSubmit}>
+                <input type="date" value={log.date} onChange = {handleDateChange}/>
+
                 {/* Tired Input (Dropdown 0-10) */}
                 <div>
                     <label>Tired (0-10):</label>
