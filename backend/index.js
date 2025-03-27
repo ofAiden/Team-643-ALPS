@@ -7,6 +7,9 @@ dotenv.config();
 
 const app = express();
 
+console.log("test");
+console.log(process.env.REACT_APP_TEST);
+
 // Database connection
 const db = mysql.createConnection({
     host: 'localhost',     // Your MySQL host, 'localhost' if running locally
