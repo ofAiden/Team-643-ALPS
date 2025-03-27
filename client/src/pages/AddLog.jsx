@@ -14,11 +14,14 @@ const AddLog = () => {
         trouble_breathing: 0
     });
 
+    console.log(log.date);
+
     const navigate = useNavigate();
 
     // Handle changes for date field
     const handleDateChange = (e) => {
         setLog(prev => ({ ...prev, date: e.target.value}));
+        console.log("at handleDateChange");
     }
     
     // Handle changes for "tired" (dropdown)
@@ -35,7 +38,7 @@ const AddLog = () => {
     // Submit log to backend
     const handleSubmit = async (e) => {
         e.preventDefault(); //does not automatically refresh page when button is clicked
-
+        console.log("at handle submit");
         console.log("Form data to submit:", log); // Debugging before sending
 
         try {

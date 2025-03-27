@@ -15,7 +15,7 @@ const CalendarPage = () => {
     useEffect(() => {
         const fetchAllNotes = async () => {
             try {
-                const res = await axios.get("http://localhost:8800/notes"); //is this supposed to say /daily_log instead of /notes
+                const res = await axios.get("http://localhost:8800/daily_log"); //is this supposed to say /daily_log instead of /notes
                 console.log('Backend Response:', res.data);  // Log the response data
                 if (Array.isArray(res.data)) {
                     setNotes(res.data);  // Set notes only if it's an array
@@ -36,9 +36,8 @@ const CalendarPage = () => {
             <Calendar 
             value={dateState}
             onChange={changeDate} />
-            <p>Selected Date: <b>{moment(dateState).format('MMMM Do YYYY')}</b></p>
+            <p>Selected Date: <b>{moment(dateState).format('MMMM Do, YYYY')}</b></p>
 
-            {/* this stuff is showing up twice. i will look into the component mounting/unmounting to see if that's why and if i can fix */}
             <div> 
                 {notes.map((note) => (
                     <div className="log-entry" key={note.id}>

@@ -48,19 +48,37 @@ app.get("/daily_log", (req, res) => {
 
 // Insert new daily log
 app.post("/daily_log", (req, res) => {
-    const { tired, sick, high_temperature, exercise, headache, chestpain, trouble_breathing } = req.body;
-
+    const { date, tired, sick, high_temperature, exercise, headache, chestpain, trouble_breathing } = req.body;
     // Validate the incoming data
+    console.log("post1 from backend");
+
     if (
-        tired === undefined || sick === undefined || high_temperature === undefined || 
+        date === undefined || tired === undefined || sick === undefined || high_temperature === undefined || 
         exercise === undefined || headache === undefined || chestpain === undefined || trouble_breathing === undefined
     ) {
         return res.status(400).json({ error: "Missing required fields" });
     }
+    console.log("post 2 from backend");
+
 
     // Insert the daily log data into the database
-    const query = "INSERT INTO daily_log (tired, sick, high_temperature, exercise, headache, chestpain, trouble_breathing) VALUES (?, ?, ?, ?, ?, ?, ?)";
-    const values = [tired, sick, high_temperature, exercise, headache, chestpain, trouble_breathing];
+    const query = 
+    `
+    INSERT INTO daily_log (date, tired, sick, high_temperature, exercise, headache, chestpain, trouble_breathing) 
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?) 
+    ON DUPLICATE KEY UPDATE
+        date=VALUES(date),
+        tired=VALUES(tired), 
+        sick=VALUES(sick), 
+        high_temperature=VALUES(high_temperature),
+        exercise=VALUES(exercise),
+        headache=VALUES(headache),
+        chestpain=VALUES(chestpain),
+        trouble_breathing=VALUES(trouble_breathing);
+    `;
+    const values = [date, tired, sick, high_temperature, exercise, headache, chestpain, trouble_breathing];
+
+    console.log("post before query backend", values);
 
     db.query(query, values, (err, result) => {
         if (err) {
@@ -69,6 +87,8 @@ app.post("/daily_log", (req, res) => {
         }
         res.status(200).json({ message: "Daily Log added successfully", logId: result.insertId });
     });
+    console.log("post after query backend");
+
 });
 
 app.get("/notes", (req, res) => {
