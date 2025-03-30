@@ -4,7 +4,7 @@ import axios from "axios";
 
 const AddLog = () => {
     const [log, setLog] = useState({
-        date: new Date().toISOString().split('T')[0],
+        date: new Date().toLocaleDateString("en-CA", {timeZone: "America/Los_Angeles"}), //en-CA is CAnada, which uses YYYY-MM-DD format
         tired: 0, // Range 0-10
         sick: 0,
         high_temperature: 0,
@@ -55,11 +55,12 @@ const AddLog = () => {
             <h1>Add Daily Log</h1>
             
             <form onSubmit={handleSubmit}>
+                {/* Date Selection */}
                 <input type="date" value={log.date} onChange = {handleDateChange}/>
 
-                {/* Tired Input (Dropdown 0-10) */}
+                {/* Tiredness Input (Dropdown 0-10) */}
                 <div>
-                    <label>Tired (0-10):</label>
+                    <label>Tiredness (0-10):</label>
                     <select name="tired" onChange={handleTiredChange} value={log.tired}>
                         {[...Array(11).keys()].map(num => (
                             <option key={num} value={num}>{num}</option>

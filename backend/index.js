@@ -52,7 +52,7 @@ app.get("/daily_log", (req, res) => {
 app.post("/daily_log", (req, res) => {
     const { date, tired, sick, high_temperature, exercise, headache, chestpain, trouble_breathing } = req.body;
     // Validate the incoming data
-    console.log("post1 from backend");
+    console.log("req.body was made");
 
     if (
         date === undefined || tired === undefined || sick === undefined || high_temperature === undefined || 
@@ -60,7 +60,7 @@ app.post("/daily_log", (req, res) => {
     ) {
         return res.status(400).json({ error: "Missing required fields" });
     }
-    console.log("post 2 from backend");
+    console.log("after checking for required fields");
 
 
     // Insert the daily log data into the database
@@ -80,7 +80,7 @@ app.post("/daily_log", (req, res) => {
     `;
     const values = [date, tired, sick, high_temperature, exercise, headache, chestpain, trouble_breathing];
 
-    console.log("post before query backend", values);
+    console.log("daily log post before query", values);
 
     db.query(query, values, (err, result) => {
         if (err) {
@@ -103,15 +103,15 @@ app.get("/notes", (req, res) => {
 
 // Create a new note
 app.post("/notes", (req, res) => {
-    const q = "INSERT INTO notes (type, content) VALUES (?)";
+    const q = "INSERT INTO notes (date, type, content) VALUES (?, ?, ?)";
     const values = [
+        req.body.date,
         req.body.type,
         req.body.content,
     ];
     
-    db.query(q, [values], (err, data) => {
+    db.query(q, values, (err, data) => {
         console.log("Note has been sent to database");
-        console.log(err);
         if (err) return res.json(err);
         return res.json("Note has been created successfully");
     });
@@ -133,9 +133,9 @@ app.put("/notes/:id", (req, res) => {
     const noteId = req.params.id;
     const q = "UPDATE notes SET type = ?, content = ? WHERE id = ?";
     const values = [
+        req.body.date,
         req.body.type,
         req.body.content,
-//we need date here right
     ];
 
     db.query(q, [...values, noteId], (err, data) => {

@@ -27,12 +27,12 @@ function App() {
           <Route path="/" element={<DailyLog />} />
           <Route path="/add" element={<AddMemo />} />
           <Route path="/update/:id" element={<Update />} />
-          <Route path="/notes" element={<ViewNotes />} />
+          <Route path="/notes" element={<Notes />} />
           <Route path="/calendar" element={<Calendar />} />
           <Route path="/medicine" element={<Medicine />} />
           <Route path="/doctorquestions" element={<DoctorQuestions />} />
-          <Route path="*" element={<h1>Page not found</h1>} />
           <Route path="/daily_log" element={<AddLog />} /> {/* This matches the backend route */}
+          <Route path="*" element={<h1>Page not found</h1>} />
         </Routes>
       </BrowserRouter>
     </div>

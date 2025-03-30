@@ -50,8 +50,6 @@ const Notes = () => {
                     <Link to="/add">Add new entry</Link>
                 </button>
             </div>
-
-            {/*what is this div below for*/}
         </div>
     );
 };

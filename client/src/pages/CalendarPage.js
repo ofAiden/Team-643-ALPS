@@ -32,25 +32,25 @@ const CalendarPage = () => {
     }, []);
 
 
-    //fetch info from notes
-    // const [notes, setNotes] = useState([]);
-    // useEffect(() => {
-    //     const fetchAllNotes = async () => {
-    //         try {
-    //             const res = await axios.get("http://localhost:8800/notes"); //is this supposed to say /daily_log instead of /notes
-    //             console.log('Backend Response:', res.data);  // Log the response data
-    //             if (Array.isArray(res.data)) {
-    //                 setNotes(res.data);  // Set notes only if it's an array
-    //             } else {
-    //                 console.log("Unexpected response data:", res.data);  // If it's not an array, log it
-    //             }
-    //         } catch (err) {
-    //             console.log("Error fetching notes:", err);
-    //         }
-    //     };
+    // fetch info from notes
+    const [notes, setNotes] = useState([]);
+    useEffect(() => {
+        const fetchAllNotes = async () => {
+            try {
+                const res = await axios.get("http://localhost:8800/notes");
+                console.log('Backend Response:', res.data);  // Log the response data
+                if (Array.isArray(res.data)) {
+                    setNotes(res.data);  // Set notes only if it's an array
+                } else {
+                    console.log("Unexpected response data:", res.data);  // If it's not an array, log it
+                }
+            } catch (err) {
+                console.log("Error fetching notes:", err);
+            }
+        };
     
-    //     fetchAllNotes();
-    // }, []);
+        fetchAllNotes();
+    }, []);
 
 
     //obtaining the daily log that was logged on a selected day
