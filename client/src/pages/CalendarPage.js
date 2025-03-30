@@ -61,6 +61,9 @@ const CalendarPage = () => {
         return logDate === selectedDate; //returns true if the log in the database has the same date as the selected date
     })
 
+    //obtaining the memos of type Quick Note. returns True if the memo is a Quick Note and matches the selected date on the calendar
+    const daysNotes = notes.filter((note) => note.type === "Quick Note" && moment(note.date).format('YYYY-MM-DD') === moment(dateState).format('YYYY-MM-DD'));
+
     return (
         <div>
             <h1> Calendar </h1>
@@ -69,16 +72,26 @@ const CalendarPage = () => {
             onChange={changeDate} />
             <p>Selected Date: <b>{moment(dateState).format('MMMM Do, YYYY')}</b></p>
 
-            <div> 
-                {daysLog.map((note) => (
-                    <div className="log-entry" key={note.id}>
-                        <p><strong>Tiredness:</strong> {note.tired ? <strong>{note.tired}</strong> : "No"}</p>
-                        <p><strong>Sick:</strong> {note.sick ? <strong>Yes</strong> : "No"}</p>
-                        <p><strong>High Temperature:</strong> {note.high_temperature ? <strong>Yes</strong> : "No"}</p>
-                        <p><strong>Exercise:</strong> {note.exercise ? <strong>Yes</strong> : "No"}</p>
-                        <p><strong>Headache:</strong> {note.headache ? <strong>Yes</strong> : "No"}</p>
-                        <p><strong>Chest Pain:</strong> {note.chestpain ? <strong>Yes</strong> : "No"}</p>
-                        <p><strong>Trouble Breathing:</strong> {note.trouble_breathing ? <strong>Yes</strong> : "No"}</p>
+            <div>
+                {/* Displaying notes */}
+                <h3>Notes</h3>
+                {daysNotes.map((note) => (
+                    <div key={note.id}>
+                        <ul>{note.content}</ul>
+                    </div> 
+                ))}
+                
+                {/* Displaying data from daily log */}
+                {daysLog.map((log) => (
+                    //the Daily Log for that date
+                    <div className="log-entry" key={log.id}>
+                        <p><strong>Tiredness:</strong> {log.tired ? <strong>{log.tired}</strong> : "Not Logged"}</p>
+                        {log.sick == 1 && <p><strong>Sick: Yes</strong></p>}
+                        {(log.sick || log.high_temperature) && (<p>High Temperature:  {log.high_temperature ? <strong>Yes</strong> : log.sick===1 ? <strong>No</strong> : null}</p>)}
+                        <p><strong>Exercise:</strong> {log.exercise ? <strong>Yes</strong> : "No"}</p>
+                        <p><strong>Headache:</strong> {log.headache ? <strong>Yes</strong> : "No"}</p>
+                        <p><strong>Chest Pain:</strong> {log.chestpain ? <strong>Yes</strong> : "No"}</p>
+                        <p><strong>Trouble Breathing:</strong> {log.trouble_breathing ? <strong>Yes</strong> : "No"}</p>
                     </div>
                 ))}
             </div>
