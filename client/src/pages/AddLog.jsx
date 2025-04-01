@@ -14,7 +14,7 @@ const AddLog = () => {
         trouble_breathing: 0
     });
 
-    console.log(log.date);
+    console.log("object date: ", log.date);
 
     const navigate = useNavigate();
 
@@ -38,7 +38,6 @@ const AddLog = () => {
     // Submit log to backend
     const handleSubmit = async (e) => {
         e.preventDefault(); //does not automatically refresh page when button is clicked
-        console.log("at handle submit");
         console.log("Form data to submit:", log); // Debugging before sending
 
         try {

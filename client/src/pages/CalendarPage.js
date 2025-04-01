@@ -74,24 +74,38 @@ const CalendarPage = () => {
 
             <div>
                 {/* Displaying notes */}
-                <h3>Notes</h3>
+                {daysNotes.length !==  0 && <h3>Notes</h3>} {/*only display Notes heading if there actually are notes for that day*/}
                 {daysNotes.map((note) => (
                     <div key={note.id}>
-                        <ul>{note.content}</ul>
+                        <ul><li>{note.content}</li></ul>
                     </div> 
                 ))}
                 
                 {/* Displaying data from daily log */}
+                <h3>Daily Log</h3>
                 {daysLog.map((log) => (
-                    //the Daily Log for that date
+                    // // displays all fields, even if No
+                    // <div className="log-entry" key={log.id}>
+                    //     <p><strong>Tiredness:</strong> {log.tired ? <strong>{log.tired}</strong> : "Not Logged"}</p>
+                    //     {log.sick == 1 && <p><strong>Sick: Yes</strong></p>}
+                    //     {(log.sick || log.high_temperature) && (<p><strong>High Temperature:</strong>  {log.high_temperature ? <strong>Yes</strong> : log.sick===1 ? <strong>No</strong> : null}</p>)}
+                    //     <p><strong>Exercise:</strong> {log.exercise ? <strong>Yes</strong> : "No"}</p>
+                    //     <p><strong>Headache:</strong> {log.headache ? <strong>Yes</strong> : "No"}</p>
+                    //     <p><strong>Chest Pain:</strong> {log.chestpain ? <strong>Yes</strong> : "No"}</p>
+                    //     <p><strong>Trouble Breathing:</strong> {log.trouble_breathing ? <strong>Yes</strong> : "No"}</p>
+                    // </div>
+
+                    //displaying only the fields that are Yes
                     <div className="log-entry" key={log.id}>
-                        <p><strong>Tiredness:</strong> {log.tired ? <strong>{log.tired}</strong> : "Not Logged"}</p>
-                        {log.sick == 1 && <p><strong>Sick: Yes</strong></p>}
-                        {(log.sick || log.high_temperature) && (<p>High Temperature:  {log.high_temperature ? <strong>Yes</strong> : log.sick===1 ? <strong>No</strong> : null}</p>)}
-                        <p><strong>Exercise:</strong> {log.exercise ? <strong>Yes</strong> : "No"}</p>
-                        <p><strong>Headache:</strong> {log.headache ? <strong>Yes</strong> : "No"}</p>
-                        <p><strong>Chest Pain:</strong> {log.chestpain ? <strong>Yes</strong> : "No"}</p>
-                        <p><strong>Trouble Breathing:</strong> {log.trouble_breathing ? <strong>Yes</strong> : "No"}</p>
+                        <ul> {/* Boolean() converts the 0 or 1 into a true or false */}
+                            {log.tired !== null && <li>Tiredness:  {log.tired}</li>}
+                            {Boolean(log.sick) && <li>Sick</li>}
+                            {Boolean(log.high_temperature) && <li>High temperature</li>}                            
+                            {Boolean(log.exercise) && <li>Exercise</li>}
+                            {Boolean(log.headache) && <li>Headache</li>}
+                            {Boolean(log.chestpain) && <li>Chest pain</li>}
+                            {Boolean(log.trouble_breathing) && <li>Trouble breathing</li>}
+                        </ul>
                     </div>
                 ))}
             </div>
