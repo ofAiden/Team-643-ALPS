@@ -12,7 +12,8 @@ const Notes = () => {
                 const res = await axios.get("http://localhost:8800/notes");
                 console.log('Backend Response:', res.data);  // Log the response data
                 if (Array.isArray(res.data)) {
-                    setNotes(res.data);  // Set notes only if it's an array
+                    const filteredNotes = res.data.filter(note => note.type === "Quick Note");
+                    setNotes(filteredNotes);  // Set only filtered notes
                 } else {
                     console.log("Unexpected response data:", res.data);  // If it's not an array, log it
                 }
