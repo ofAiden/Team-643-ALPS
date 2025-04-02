@@ -2,6 +2,7 @@ import express from "express";
 import mysql from "mysql";
 import cors from "cors";
 import dotenv from "dotenv";
+// dotenv.config().parsed;
 dotenv.config({ path: "./.env" });
 dotenv.config();
 
@@ -18,10 +19,13 @@ const db = mysql.createConnection({
     database: 'notes_app'  // Your MySQL database name
 });
 
-app.use(express.json());
-app.use(cors());
+//run this in mysql if authentication error is encountered:
+//ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'password';
 
-// Database connection
+app.use(express.json()); //allows you to send any json file using a client
+app.use(cors()); //prevent the issue of backend server preventing the application to use the backend api
+
+// // Database connection
 db.connect((err) => {
     if (err) {
         console.error("Database connection failed:", err);
@@ -30,7 +34,7 @@ db.connect((err) => {
     }
 });
 
-// Backend health check
+// Backend health check (when at "/" page of backend, gets request from user and sends response)
 app.get("/", (req, res) => {
     res.send("Backend is running!");
 });
@@ -40,33 +44,53 @@ app.get("/daily_log", (req, res) => {
     const query = "SELECT * FROM daily_log";
     db.query(query, (err, data) => {
         if (err) return res.status(500).json({ error: err.message });
-        return res.json(data);
+        return res.json(data); //if no error, returns data
     });
 });
 
 // Insert new daily log
 app.post("/daily_log", (req, res) => {
-    const { tired, sick, high_temperature, exercise, headache, chestpain, trouble_breathing } = req.body;
-
+    const { date, tired, sick, high_temperature, exercise, headache, chestpain, trouble_breathing } = req.body;
     // Validate the incoming data
+    console.log("req.body was made");
+
     if (
-        tired === undefined || sick === undefined || high_temperature === undefined || 
+        date === undefined || tired === undefined || sick === undefined || high_temperature === undefined || 
         exercise === undefined || headache === undefined || chestpain === undefined || trouble_breathing === undefined
     ) {
         return res.status(400).json({ error: "Missing required fields" });
     }
+    console.log("after checking for required fields");
 
-    // Insert the data into the database
-    const query = "INSERT INTO daily_log (tired, sick, high_temperature, exercise, headache, chestpain, trouble_breathing) VALUES (?, ?, ?, ?, ?, ?, ?)";
-    const values = [tired, sick, high_temperature, exercise, headache, chestpain, trouble_breathing];
+
+    // Insert the daily log data into the database
+    const query = 
+    `
+    INSERT INTO daily_log (date, tired, sick, high_temperature, exercise, headache, chestpain, trouble_breathing) 
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?) 
+    ON DUPLICATE KEY UPDATE
+        date=VALUES(date),
+        tired=VALUES(tired), 
+        sick=VALUES(sick), 
+        high_temperature=VALUES(high_temperature),
+        exercise=VALUES(exercise),
+        headache=VALUES(headache),
+        chestpain=VALUES(chestpain),
+        trouble_breathing=VALUES(trouble_breathing);
+    `;
+    const values = [date, tired, sick, high_temperature, exercise, headache, chestpain, trouble_breathing];
+
+    console.log("daily log post before query", values);
 
     db.query(query, values, (err, result) => {
         if (err) {
-            console.error("Error inserting log:", err);
+            console.error("Error inserting daily log:", err);
             return res.status(500).json({ error: "Database error" });
         }
-        res.status(200).json({ message: "Log added successfully", logId: result.insertId });
+        res.status(200).json({ message: "Daily Log added successfully", logId: result.insertId });
     });
+    console.log("post after query backend");
+
 });
 
 app.get("/notes", (req, res) => {
@@ -79,15 +103,15 @@ app.get("/notes", (req, res) => {
 
 // Create a new note
 app.post("/notes", (req, res) => {
-    const q = "INSERT INTO notes (type, content) VALUES (?)";
+    const q = "INSERT INTO notes (date, type, content) VALUES (?, ?, ?)";
     const values = [
+        req.body.date,
         req.body.type,
         req.body.content,
     ];
     
-    db.query(q, [values], (err, data) => {
+    db.query(q, values, (err, data) => {
         console.log("Note has been sent to database");
-        console.log(err);
         if (err) return res.json(err);
         return res.json("Note has been created successfully");
     });
@@ -109,6 +133,7 @@ app.put("/notes/:id", (req, res) => {
     const noteId = req.params.id;
     const q = "UPDATE notes SET type = ?, content = ? WHERE id = ?";
     const values = [
+        req.body.date,
         req.body.type,
         req.body.content,
     ];

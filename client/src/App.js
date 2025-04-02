@@ -5,9 +5,10 @@ import DailyLog from "./pages/Daily_Log";
 import AddMemo from "./pages/AddMemo";
 import Update from "./pages/Update";
 import Notes from './pages/Notes';
-import { DoctorQuestions } from './pages/DoctorQsPage';
+import DoctorQuestions from './pages/DoctorQsPage';
 import { Medicine } from './pages/MedicinePage';
 import AddLog from "./pages/AddLog"; // This is correct, no change needed
+import Calendar from "./pages/CalendarPage";
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
         <div> {/* navigation bar */}
           <Link to="/">Daily Log</Link>
           <Link to="/notes">Notes</Link>
+          <Link to="/calendar">Calendar</Link>
           <Link to="/medicine">Medicine</Link>
           <Link to="/doctorquestions">Doctor Questions</Link>
         </div>
@@ -25,10 +27,12 @@ function App() {
           <Route path="/" element={<DailyLog />} />
           <Route path="/add" element={<AddMemo />} />
           <Route path="/update/:id" element={<Update />} />
+          <Route path="/notes" element={<Notes />} />
+          <Route path="/calendar" element={<Calendar />} />
           <Route path="/medicine" element={<Medicine />} />
           <Route path="/doctorquestions" element={<DoctorQuestions />} />
-          <Route path="*" element={<h1>Page not found</h1>} />
           <Route path="/daily_log" element={<AddLog />} /> {/* This matches the backend route */}
+          <Route path="*" element={<h1>Page not found</h1>} />
         </Routes>
       </BrowserRouter>
     </div>

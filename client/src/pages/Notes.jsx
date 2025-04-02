@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import moment from 'moment';
 
 const Notes = () => {
     // Note Logging
@@ -36,23 +37,33 @@ const Notes = () => {
 
     return (
         <div>
-            <div>
-                <h2>Record a note</h2>
-                {notes.map((note) => (
-                    <div className="note" key={note.id}>
-                        <p>{note.content}</p>
-                        <button className="delete" onClick={() => handleDelete(note.id)}>Delete</button>
-                        <button className="update">
-                            <Link to={`/update/${note.id}`}>Update</Link>
-                        </button>
-                    </div>
-                ))}
-                <button>
-                    <Link to="/add">Add new entry</Link>
-                </button>
-            </div>
-
-            {/*what is this div below for*/}
+            <h2>Record a note</h2>
+            <table border="1">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Note</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {notes.map((note) => (
+                        <tr key={note.id}>
+                            <td>{moment(note.date).format('YYYY-MM-DD')}</td>
+                            <td>{note.content}</td>
+                            <td>
+                                <button className="delete" onClick={() => handleDelete(note.id)}>Delete</button>
+                                <button className="update">
+                                    <Link to={`/update/${note.id}`}>Update</Link>
+                                </button>
+                            </td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
+            <button>
+                <Link to="/add">Add new entry</Link>
+            </button>
         </div>
     );
 };
