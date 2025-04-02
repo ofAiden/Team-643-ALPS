@@ -6,7 +6,7 @@ import AddMemo from "./pages/AddMemo";
 import Update from "./pages/Update";
 import Notes from './pages/Notes';
 import DoctorQuestions from './pages/DoctorQsPage';
-import { Medicine } from './pages/MedicinePage';
+import Medicine from './pages/MedicinePage';
 import AddLog from "./pages/AddLog"; // This is correct, no change needed
 import Calendar from "./pages/CalendarPage";
 
