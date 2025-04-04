@@ -93,6 +93,47 @@ app.post("/daily_log", (req, res) => {
 
 });
 
+//medicines
+// Get all medicines
+app.get("/medicine", (req, res) => {
+    const query = "SELECT * FROM medicine";
+    db.query(query, (err, data) => {
+        if (err) {
+            console.error("Error retrieving medicines:", err);
+            return res.status(500).json({ error: "Database error" });
+        }
+        return res.json(data);
+    });
+});
+// Insert new medicine
+app.post("/medicine", (req, res) => {
+    const { medicine, dosage, active } = req.body;
+
+    // Validate the incoming data
+    if (typeof medicine !== 'string' || typeof dosage !== 'number' || typeof active !== 'boolean') {
+        return res.status(400).json({ error: "Invalid input types" });
+    }
+
+    // Insert the medicine data into the database
+    const query = `
+        INSERT INTO medicine (medicine, dosage, active)
+        VALUES (?, ?, ?)
+        ON DUPLICATE KEY UPDATE
+            dosage = VALUES(dosage),
+            active = VALUES(active);
+    `;
+    const values = [medicine, dosage, active];
+
+    db.query(query, values, (err, result) => {
+        if (err) {
+            console.error("Error inserting medicine:", err);
+            return res.status(500).json({ error: "Database error" });
+        }
+        res.status(200).json({ message: "Medicine added successfully", medicineId: result.insertId });
+    });
+});
+
+
 app.get("/notes", (req, res) => {
     const q = "SELECT * FROM notes";
     db.query(q, (err, data) => {

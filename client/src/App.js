@@ -9,6 +9,7 @@ import DoctorQuestions from './pages/DoctorQsPage';
 import Medicine from './pages/MedicinePage';
 import AddLog from "./pages/AddLog"; // This is correct, no change needed
 import Calendar from "./pages/CalendarPage";
+import MedicineForm from "./pages/AddMedicine";
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
           <Link to="/calendar">Calendar</Link>
           <Link to="/medicine">Medicine</Link>
           <Link to="/doctorquestions">Doctor Questions</Link>
+          <Link to="/addmedicine">Add Medicine</Link>
         </div>
 
         <Routes>
@@ -31,6 +33,7 @@ function App() {
           <Route path="/calendar" element={<Calendar />} />
           <Route path="/medicine" element={<Medicine />} />
           <Route path="/doctorquestions" element={<DoctorQuestions />} />
+          <Route path="/addmedicine" element={<MedicineForm />} />
           <Route path="/daily_log" element={<AddLog />} /> {/* This matches the backend route */}
           <Route path="*" element={<h1>Page not found</h1>} />
         </Routes>
