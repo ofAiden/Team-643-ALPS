@@ -7,7 +7,7 @@ const MedicineForm = () => {
     const [selectedMedicine, setSelectedMedicine] = useState('');
     const [dosage, setDosage] = useState('');
     const [unit, setUnit] = useState('Pill/Tablet');
-    const [isActive, setIsActive] = useState(false);
+    const [isActive, setIsActive] = useState(false); //do you want to make default true
 
     // Fetch existing medicines from the backend
     useEffect(() => {
@@ -63,17 +63,21 @@ const MedicineForm = () => {
     return (
         <div>
             <h2>Add New Medicine</h2>
-            <div>
-                <input
-                    type="text"
-                    value={newMedicine}
-                    onChange={(e) => setNewMedicine(e.target.value)}
-                    placeholder="Enter medicine name"
-                />
-                <button type="button" onClick={handleAddMedicine}>
-                    Add Medicine
-                </button>
-            </div>
+            <form class="row g-3">
+                <div class="col-auto">
+                    <input
+                        type="text"
+                        class="form-control"
+                        value={newMedicine}
+                        onChange={(e) => setNewMedicine(e.target.value)}
+                        placeholder="Enter medicine name"
+                    />
+                </div>
+
+                <div class="col-auto">
+                    <button type="submit" class="btn btn-primary mb-3" onClick={handleAddMedicine}>Add Medicine</button>
+                </div>
+            </form>
 
             <h2>Manage Medicines</h2>
             <form onSubmit={handleSubmit}>
@@ -118,10 +122,13 @@ const MedicineForm = () => {
                     </select>
                 </div>
 
-                <div>
+                <div class="form-check form-switch">
                     <label>
                         <input
+                            class="form-check-input"
                             type="checkbox"
+                            role="switch"
+                            id="switchCheckDefault"
                             checked={isActive}
                             onChange={(e) => setIsActive(e.target.checked)}
                         />

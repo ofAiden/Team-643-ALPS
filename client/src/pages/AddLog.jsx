@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import Checkbox from "../Checkbox.js";
 
 const AddLog = () => {
     const [log, setLog] = useState({
@@ -69,9 +70,12 @@ const AddLog = () => {
 
                 {/* Checkbox Inputs for Boolean Fields */}
                 {["sick", "high_temperature", "exercise", "headache", "chestpain", "trouble_breathing"].map((key) => (
-                    <div key={key}>
-                        <label>
-                            <input 
+                    <div key={key} class="form-check">
+                        {/* <Checkbox label={key} checked="checked" onChange={handleCheckboxChange}></Checkbox> 
+                        using Checkbox component, currently not working*/} 
+                        <label class="form-check-label">
+                            <input
+                                class="form-check-input"
                                 type="checkbox" 
                                 name={key} 
                                 checked={log[key] === 1} 

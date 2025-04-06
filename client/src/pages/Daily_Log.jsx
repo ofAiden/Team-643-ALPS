@@ -35,18 +35,11 @@ import Checkbox from "../Checkbox";
 const Daily_Log = () => {
     // Note Logging
     return (
-        <div>
-            <div>
-                <h2>Record a note</h2>
-                <button>
-                    <Link to="/add">Add new note</Link>
-                </button>
-                <h2>Daily Log</h2>
-                <button>
-                    <Link to="/daily_log">Add new log</Link>
-                </button>
-            </div>
+        <div class="mx-auto p-2">
+            <Link to="/add" class="btn btn-primary btn-lg">Add new note</Link>
+            <Link to="/daily_log" class="btn btn-primary btn-lg">Add new daily log</Link>
         </div>
+        
     );
 };
 
