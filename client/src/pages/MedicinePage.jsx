@@ -76,11 +76,14 @@ const Medicine = () => {
             <Link to="/add" class="btn btn-primary">Add new note</Link>
 
             {showUpdate && selectedNote && (
-                <Update
-                    note={selectedNote}
-                    onClose={closeUpdate}
-                    onUpdate={handleUpdate}
-                />
+                <div>
+                    <h3>Update Medicine Note</h3>
+                    <Update
+                        note={selectedNote}
+                        onClose={closeUpdate}
+                        onUpdate={handleUpdate}
+                    />
+                </div>
             )}
         </div>
     );

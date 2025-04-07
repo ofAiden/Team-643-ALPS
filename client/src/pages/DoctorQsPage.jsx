@@ -4,7 +4,6 @@ import { Link } from "react-router-dom";
 import moment from 'moment';
 import Update from './Update'
 
-
 const DoctorQuestions = () => {
     // Note Logging
     const [notes, setNotes] = useState([]);
@@ -81,11 +80,14 @@ const DoctorQuestions = () => {
             </div>
 
             {showUpdate && selectedNote && (
-                <Update
-                    note={selectedNote}
-                    onClose={closeUpdate}
-                    onUpdate={handleUpdate}
-                />
+                <div>
+                    <h3>Update Question</h3>
+                    <Update
+                        note={selectedNote}
+                        onClose={closeUpdate}
+                        onUpdate={handleUpdate}
+                    />
+                </div>
             )}
         </div>
     );

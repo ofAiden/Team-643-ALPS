@@ -35,30 +35,49 @@ const AddMemo = () => {
     
     return (
         <div className="form">
-            <h1>Add New Note</h1>
-            
+            <h1>Add New Memo</h1>
+
             <form onSubmit={handleNoteSubmit}>
-                {/* Input for Selecting Date */}
-                <input type="date" value={note.date} onChange = {handleDateChange}/>
+                <div className="row g-2">
+                    {/* input for date */}
+                    <div className="col-auto">
+                        <div className="form-floating">
+                            <input 
+                                type="date" 
+                                className="form-control" 
+                                value={note.date} 
+                                onChange = {handleDateChange}/>
+                            <label htmlFor="floatingSelectGrid">Date</label>
+                        </div>
+                    </div>
 
-                {/* Dropdown for selecting type */}
-                <label>Type:</label>
-                <select name="type" onChange={handleChange} value={note.type}>
-                    <option value="Quick Note">Quick Note</option>
-                    <option value="Doctor Question">Doctor Question</option>
-                    <option value="Medicine">Medicine</option>
-                </select>
+                    {/* Dropdown for selecting type */}
+                    <div className="col-auto">
+                        <label htmlFor="floatingSelect">Type of Memo</label>
+                        <select className="form-select" name="type" onChange={handleChange} value={note.type} style={{ width: '200px' }}>
+                            <option value="Quick Note">Quick Note</option>
+                            <option value="Doctor Question">Doctor Question</option>
+                            <option value="Medicine">Medicine</option>
+                        </select>
+                    </div>
+                    
+                    {/* text box for entering note */}
+                    <div class="col-md-6">
+                        <div class="form-floating">
+                        <input
+                            type="text"
+                            name="content"
+                            className="form-control"
+                            placeholder="Add a note"
+                            onChange={handleChange}
+                            value={note.content}
+                        />
+                        <label htmlFor="floatingInputGrid">Content</label>
+                        </div>
+                    </div>
+                </div>
 
-                {/* Text input for content */}
-                <input
-                    type="text"
-                    placeholder="Content"
-                    onChange={handleChange}
-                    name="content"
-                    value={note.content}
-                />
-
-                <button type="submit">Add Note</button>
+                <button type="submit" className="btn btn-primary btn-md">Submit Note</button>
             </form>
 
         </div>

@@ -32,26 +32,42 @@ const Update = ({note, onClose, onUpdate}) => {
     console.log(note);
     return (
         <div>
-            <h3>Update a Note</h3>
-            <input
-                type="date"
-                value={updatedNote.date ? moment(updatedNote.date).format("YYYY-MM-DD") : ""}
-                onChange={handleDateChange}
-            />
-            <select name="type" value={updatedNote.type} onChange={handleChange}>
-                <option value="Quick Note">Quick Note</option>
-                <option value="Doctor Question">Doctor Question</option>
-                <option value="Medicine">Medicine</option>
-            </select>
-            <input
-                type="text"
-                placeholder="content"
-                onChange={handleChange}
-                name="content"
-                value={updatedNote.content} // value binds the state to the input
-            />
-            <button onClick={handleSubmit}>Update</button>
-            <button onClick={onClose}>Cancel</button>
+            <div className="row g-2">
+                {/* date */}
+                <div className="col-auto">
+                    <input
+                        type="date"
+                        value={updatedNote.date ? moment(updatedNote.date).format("YYYY-MM-DD") : ""}
+                        onChange={handleDateChange}
+                    />
+                </div>
+
+                {/* type */}
+                <div className="col-auto">
+                    <select name="type" value={updatedNote.type} onChange={handleChange}>
+                        <option value="Quick Note">Quick Note</option>
+                        <option value="Doctor Question">Doctor Question</option>
+                        <option value="Medicine">Medicine</option>
+                    </select>
+                </div>
+
+                {/* content */}
+                <div className="col-auto">
+                    <input 
+                        type="text"
+                        placeholder="content"
+                        onChange={handleChange}
+                        name="content"
+                        value={updatedNote.content}
+                    />
+                </div>
+                <div className="col-auto">
+                    <button onClick={handleSubmit}>Update</button>
+                </div>
+                <div className="col-auto">
+                    <button onClick={onClose}>Cancel</button>
+                </div>
+            </div>
         </div>
     );
 };

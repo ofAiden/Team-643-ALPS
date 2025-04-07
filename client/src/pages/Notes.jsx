@@ -73,15 +73,19 @@ const Notes = () => {
                     ))}
                 </tbody>
             </table>
-            <Link to="/add" className="btn btn-primary">Add new entry</Link>
 
             {showUpdate && selectedNote && (
-                <Update
-                    note={selectedNote}
-                    onClose={closeUpdate}
-                    onUpdate={handleUpdate}
-                />
+                <div>
+                    <h3>Update Note</h3>
+                    <Update
+                        note={selectedNote}
+                        onClose={closeUpdate}
+                        onUpdate={handleUpdate}
+                    />
+                </div>
             )}
+
+            <Link to="/add" className="btn btn-primary">Add new entry</Link>
         </div>
     );
 };
