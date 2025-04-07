@@ -2,10 +2,13 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import moment from 'moment';
+import Update from './Update'
 
 const Notes = () => {
     // Note Logging
     const [notes, setNotes] = useState([]);
+    const [selectedNote, setSelectedNote] = useState(null);
+    const [showUpdate, setShowUpdate] = useState(false);
 
     useEffect(() => {
         const fetchAllNotes = async () => {
@@ -35,10 +38,21 @@ const Notes = () => {
         }
     };
 
+    const openUpdate = (note) => {
+        setSelectedNote(note);
+        setShowUpdate(true);
+    };
+    const closeUpdate = () => {
+        setShowUpdate(false);
+    };
+    const handleUpdate = (updatedNote) => {
+        setNotes(notes.map((n) => (n.id === updatedNote.id ? updatedNote : n)));
+    };
+
     return (
         <div>
             <h2>Notes</h2>
-            <table border="1" class="table table-striped table-hover">
+            <table border="1" className="table table-striped table-hover">
                 <thead>
                     <tr>
                         <th>Date</th>
@@ -52,14 +66,23 @@ const Notes = () => {
                             <td>{moment(note.date).format('YYYY-MM-DD')}</td>
                             <td>{note.content}</td>
                             <td>
-                                <Link to={`/update/${note.id}`} class="btn btn-outline-primary">Update</Link>
-                                <button class="btn btn-outline-danger" onClick={() => handleDelete(note.id)}>Delete</button>
+                                <button className="btn btn-outline-primary" onClick={() => openUpdate(note)}>Update</button>
+                                {/* <Link to={`/update/${note.id}`} state={note} className="btn btn-outline-primary">Update</Link> */}
+                                <button className="btn btn-outline-danger" onClick={() => handleDelete(note.id)}>Delete</button>
                             </td>
                         </tr>
                     ))}
                 </tbody>
             </table>
-            <Link to="/add" class="btn btn-primary">Add new entry</Link>
+            <Link to="/add" className="btn btn-primary">Add new entry</Link>
+
+            {showUpdate && selectedNote && (
+                <Update
+                    note={selectedNote}
+                    onClose={closeUpdate}
+                    onUpdate={handleUpdate}
+                />
+            )}
         </div>
     );
 };

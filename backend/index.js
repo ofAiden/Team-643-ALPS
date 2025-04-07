@@ -158,9 +158,13 @@ app.delete("/notes/:id", (req, res) => {
 app.put("/notes/:id", (req, res) => {
     const noteId = req.params.id;
     const { date, type, content } = req.body;
+    console.log("updating/adding note with:", req.body)
     const q = "UPDATE notes SET date = ?, type = ?, content = ? WHERE id = ?";
     db.query(q, [date, type, content, noteId], (err, data) => {
-        if (err) return res.status(500).json({ error: "Database error" });
+        if (err) {
+            console.log("Error in adding/updating note:", err);
+            return res.status(500).json({ error: "Database error" });
+        }
         return res.status(200).json({ message: "Note has been updated successfully." });
     });
 });
