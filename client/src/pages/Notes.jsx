@@ -67,7 +67,6 @@ const Notes = () => {
                             <td>{note.content}</td>
                             <td>
                                 <button className="btn btn-outline-primary" onClick={() => openUpdate(note)}>Update</button>
-                                {/* <Link to={`/update/${note.id}`} state={note} className="btn btn-outline-primary">Update</Link> */}
                                 <button className="btn btn-outline-danger" onClick={() => handleDelete(note.id)}>Delete</button>
                             </td>
                         </tr>

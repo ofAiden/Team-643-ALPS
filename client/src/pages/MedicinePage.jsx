@@ -2,10 +2,13 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import moment from 'moment';
+import Update from './Update'
 
 const Medicine = () => {
     // Note Logging
     const [notes, setNotes] = useState([]);
+    const [selectedNote, setSelectedNote] = useState(null);
+    const [showUpdate, setShowUpdate] = useState(false);
 
     useEffect(() => {
         const fetchAllNotes = async () => {
@@ -35,10 +38,21 @@ const Medicine = () => {
         }
     };
 
+    const openUpdate = (note) => {
+        setSelectedNote(note);
+        setShowUpdate(true);
+    };
+    const closeUpdate = () => {
+        setShowUpdate(false);
+    };
+    const handleUpdate = (updatedNote) => {
+        setNotes(notes.map((n) => (n.id === updatedNote.id ? updatedNote : n)));
+    };
+
     return (
         <div>
             <h2>Medicine Notes</h2>
-            <table border="1" class="table table-striped table-hover">
+            <table border="1" className="table table-striped table-hover">
                 <thead>
                     <tr>
                         <th>Date</th>
@@ -52,7 +66,7 @@ const Medicine = () => {
                             <td>{moment(note.date).format('YYYY-MM-DD')}</td>
                             <td>{note.content}</td>
                             <td>
-                                <Link to={`/update/${note.id}`} class="btn btn-outline-primary">Update</Link>
+                                <button className="btn btn-outline-primary" onClick={() => openUpdate(note)}>Update</button>
                                 <button class="btn btn-outline-danger" onClick={() => handleDelete(note.id)}>Delete</button>
                             </td>
                         </tr>
@@ -60,6 +74,14 @@ const Medicine = () => {
                 </tbody>
             </table>
             <Link to="/add" class="btn btn-primary">Add new note</Link>
+
+            {showUpdate && selectedNote && (
+                <Update
+                    note={selectedNote}
+                    onClose={closeUpdate}
+                    onUpdate={handleUpdate}
+                />
+            )}
         </div>
     );
 };

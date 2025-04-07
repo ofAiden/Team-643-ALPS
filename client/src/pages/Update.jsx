@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
 import moment from 'moment';
 
@@ -33,7 +32,7 @@ const Update = ({note, onClose, onUpdate}) => {
     console.log(note);
     return (
         <div>
-            <h1>Update a Note</h1>
+            <h3>Update a Note</h3>
             <input
                 type="date"
                 value={updatedNote.date ? moment(updatedNote.date).format("YYYY-MM-DD") : ""}
@@ -52,7 +51,7 @@ const Update = ({note, onClose, onUpdate}) => {
                 value={updatedNote.content} // value binds the state to the input
             />
             <button onClick={handleSubmit}>Update</button>
-            <button onClick={onClose}>Close</button>
+            <button onClick={onClose}>Cancel</button>
         </div>
     );
 };

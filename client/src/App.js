@@ -3,9 +3,8 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min";
 import React from 'react';
 import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
-import DailyLog from "./pages/Daily_Log";
+import Home from "./pages/Home";
 import AddMemo from "./pages/AddMemo";
-import Update from "./pages/Update";
 import Notes from './pages/Notes';
 import DoctorQuestions from './pages/DoctorQsPage';
 import Medicine from './pages/MedicinePage';
@@ -19,15 +18,6 @@ function App() {
     <div className="App">
       <BrowserRouter>
       {/* navigation bar */}
-        {/* 
-        <nav>
-          <Link to="/">Daily Log</Link>
-          <Link to="/notes">Notes</Link>
-          <Link to="/calendar">Calendar</Link>
-          <Link to="/medicine">Medicine</Link>
-          <Link to="/doctorquestions">Doctor Questions</Link>
-          <Link to="/addmedicine">Add Medicine</Link>
-        </nav> */}
         <nav class="navbar navbar-expand-lg bg-body-tertiary">
           <div class="container-fluid">
             <a class="navbar-brand" href="/">Home</a>
@@ -47,11 +37,10 @@ function App() {
         </nav>
 
         <Routes>
+          <Route path="/" element={<Home />} />
           <Route path="/notes" element={<Notes />} />
-          <Route path="/" element={<DailyLog />} />
           <Route path="/add" element={<AddMemo />} />
-          <Route path="/update/:id" element={<Update />} />
-          <Route path="/notes" element={<Notes />} />
+          {/* <Route path="/update/:id" element={<Update />} /> */}
           <Route path="/calendar" element={<Calendar />} />
           <Route path="/medicine" element={<Medicine />} />
           <Route path="/doctorquestions" element={<DoctorQuestions />} />
