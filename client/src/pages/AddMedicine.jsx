@@ -10,7 +10,7 @@ const MedicineForm = () => {
     const [selectedMedicine, setSelectedMedicine] = useState('');
     const [dosage, setDosage] = useState('');
     const [unit, setUnit] = useState('Pill/Tablet');
-    const [isActive, setIsActive] = useState(false);
+    const [isActive, setIsActive] = useState(false); //do you want to make default true
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -40,16 +40,21 @@ const MedicineForm = () => {
             unit,
             active: isActive,
         };
-
+    
         axios.post('http://localhost:8800/medicine', medicineData)
             .then(response => {
                 alert('Medicine data submitted successfully!');
+                // Reset form to default values
+                setSelectedMedicine('');
+                setDosage('');
+                setUnit('Pill/Tablet');
+                setIsActive(false);
             })
             .catch(error => {
                 console.error('Error submitting medicine data:', error);
                 alert('Failed to submit medicine data.');
             });
-    };
+    };    
 
     return (
         <div>
@@ -95,10 +100,13 @@ const MedicineForm = () => {
                     </select>
                 </div>
 
-                <div>
+                <div class="form-check form-switch">
                     <label>
                         <input
+                            class="form-check-input"
                             type="checkbox"
+                            role="switch"
+                            id="switchCheckDefault"
                             checked={isActive}
                             onChange={(e) => setIsActive(e.target.checked)}
                         />

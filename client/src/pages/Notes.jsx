@@ -37,8 +37,8 @@ const Notes = () => {
 
     return (
         <div>
-            <h2>Record a note</h2>
-            <table border="1">
+            <h2>Notes</h2>
+            <table border="1" class="table table-striped table-hover">
                 <thead>
                     <tr>
                         <th>Date</th>
@@ -52,18 +52,14 @@ const Notes = () => {
                             <td>{moment(note.date).format('YYYY-MM-DD')}</td>
                             <td>{note.content}</td>
                             <td>
-                                <button className="delete" onClick={() => handleDelete(note.id)}>Delete</button>
-                                <button className="update">
-                                    <Link to={`/update/${note.id}`}>Update</Link>
-                                </button>
+                                <Link to={`/update/${note.id}`} class="btn btn-outline-primary">Update</Link>
+                                <button class="btn btn-outline-danger" onClick={() => handleDelete(note.id)}>Delete</button>
                             </td>
                         </tr>
                     ))}
                 </tbody>
             </table>
-            <button>
-                <Link to="/add">Add new entry</Link>
-            </button>
+            <Link to="/add" class="btn btn-primary">Add new entry</Link>
         </div>
     );
 };

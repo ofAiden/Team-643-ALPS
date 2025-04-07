@@ -1,4 +1,6 @@
 import './App.css';
+import "bootstrap/dist/css/bootstrap.min.css";
+import "bootstrap/dist/js/bootstrap.bundle.min";
 import React from 'react';
 import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 import DailyLog from "./pages/Daily_Log";
@@ -16,14 +18,33 @@ function App() {
   return (
     <div className="App">
       <BrowserRouter>
-        <div> {/* navigation bar */}
+      {/* navigation bar */}
+        {/* 
+        <nav>
           <Link to="/">Daily Log</Link>
           <Link to="/notes">Notes</Link>
           <Link to="/calendar">Calendar</Link>
           <Link to="/medicine">Medicine</Link>
           <Link to="/doctorquestions">Doctor Questions</Link>
           <Link to="/addmedicine">Add Medicine</Link>
-        </div>
+        </nav> */}
+        <nav class="navbar navbar-expand-lg bg-body-tertiary">
+          <div class="container-fluid">
+            <a class="navbar-brand" href="/">Home</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+              <div class="navbar-nav">
+                <a class="nav-link" href="/notes">Notes</a>
+                <a class="nav-link" href="/calendar">Calendar</a>
+                <a class="nav-link" href="/medicine">Medicine</a>
+                <a class="nav-link" href="/doctorquestions">Doctor Questions</a>
+                <a class="nav-link" href="/addmedicine">Add Medicine</a>
+              </div>
+            </div>
+          </div>
+        </nav>
 
         <Routes>
           <Route path="/notes" element={<Notes />} />
