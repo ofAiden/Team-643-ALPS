@@ -1,31 +1,25 @@
+// backend/index.js
 import express from "express";
 import mysql from "mysql";
 import cors from "cors";
 import dotenv from "dotenv";
-// dotenv.config().parsed;
+
 dotenv.config({ path: "./.env" });
-dotenv.config();
 
 const app = express();
 
-console.log("test");
-console.log(process.env.REACT_APP_TEST);
-
 // Database connection
 const db = mysql.createConnection({
-    host: 'localhost',     // Your MySQL host, 'localhost' if running locally
-    user: 'root',          // Your MySQL username
-    password: 'Aiden.0413',// Your MySQL password
-    database: 'notes_app'  // Your MySQL database name
+    host: "localhost",
+    user: "root",
+    password: "Aiden.0413",
+    database: "notes_app",
 });
 
-//run this in mysql if authentication error is encountered:
-//ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'password';
+app.use(express.json());
+app.use(cors());
 
-app.use(express.json()); //allows you to send any json file using a client
-app.use(cors()); //prevent the issue of backend server preventing the application to use the backend api
-
-// // Database connection
+// Connect to the database
 db.connect((err) => {
     if (err) {
         console.error("Database connection failed:", err);
@@ -34,160 +28,144 @@ db.connect((err) => {
     }
 });
 
-// Backend health check (when at "/" page of backend, gets request from user and sends response)
+// Root health check
 app.get("/", (req, res) => {
     res.send("Backend is running!");
 });
 
-// Get all logs
+// Daily log routes
 app.get("/daily_log", (req, res) => {
-    const query = "SELECT * FROM daily_log";
-    db.query(query, (err, data) => {
+    db.query("SELECT * FROM daily_log", (err, data) => {
         if (err) return res.status(500).json({ error: err.message });
-        return res.json(data); //if no error, returns data
+        return res.json(data);
     });
 });
 
-// Insert new daily log
 app.post("/daily_log", (req, res) => {
     const { date, tired, sick, high_temperature, exercise, headache, chestpain, trouble_breathing } = req.body;
-    // Validate the incoming data
-    console.log("req.body was made");
 
-    if (
-        date === undefined || tired === undefined || sick === undefined || high_temperature === undefined || 
-        exercise === undefined || headache === undefined || chestpain === undefined || trouble_breathing === undefined
-    ) {
+    if ([date, tired, sick, high_temperature, exercise, headache, chestpain, trouble_breathing].includes(undefined)) {
         return res.status(400).json({ error: "Missing required fields" });
     }
-    console.log("after checking for required fields");
 
-
-    // Insert the daily log data into the database
-    const query = 
-    `
-    INSERT INTO daily_log (date, tired, sick, high_temperature, exercise, headache, chestpain, trouble_breathing) 
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?) 
-    ON DUPLICATE KEY UPDATE
-        date=VALUES(date),
-        tired=VALUES(tired), 
-        sick=VALUES(sick), 
-        high_temperature=VALUES(high_temperature),
-        exercise=VALUES(exercise),
-        headache=VALUES(headache),
-        chestpain=VALUES(chestpain),
-        trouble_breathing=VALUES(trouble_breathing);
+    const query = `
+        INSERT INTO daily_log (date, tired, sick, high_temperature, exercise, headache, chestpain, trouble_breathing)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+        ON DUPLICATE KEY UPDATE
+            tired=VALUES(tired),
+            sick=VALUES(sick),
+            high_temperature=VALUES(high_temperature),
+            exercise=VALUES(exercise),
+            headache=VALUES(headache),
+            chestpain=VALUES(chestpain),
+            trouble_breathing=VALUES(trouble_breathing);
     `;
     const values = [date, tired, sick, high_temperature, exercise, headache, chestpain, trouble_breathing];
 
-    console.log("daily log post before query", values);
-
     db.query(query, values, (err, result) => {
-        if (err) {
-            console.error("Error inserting daily log:", err);
-            return res.status(500).json({ error: "Database error" });
-        }
+        if (err) return res.status(500).json({ error: "Database error" });
         res.status(200).json({ message: "Daily Log added successfully", logId: result.insertId });
     });
-    console.log("post after query backend");
-
 });
 
-//medicines
-// Get all medicines
+// Medicine routes
 app.get("/medicine", (req, res) => {
-    const query = "SELECT * FROM medicine";
-    db.query(query, (err, data) => {
-        if (err) {
-            console.error("Error retrieving medicines:", err);
-            return res.status(500).json({ error: "Database error" });
-        }
+    db.query("SELECT * FROM medicine", (err, data) => {
+        if (err) return res.status(500).json({ error: "Database error" });
         return res.json(data);
     });
 });
-// Insert new medicine
-app.post("/medicine", (req, res) => {
-    const { medicine, dosage, active } = req.body;
 
-    // Validate the incoming data
-    if (typeof medicine !== 'string' || typeof dosage !== 'number' || typeof active !== 'boolean') {
-        return res.status(400).json({ error: "Invalid input types" });
+app.post("/medicine", (req, res) => {
+    const { medicine, dosage, unit, active } = req.body;
+
+    if (typeof medicine !== 'string' || medicine.trim() === '' ||
+        typeof dosage !== 'number' ||
+        typeof unit !== 'string' || unit.trim() === '' ||
+        typeof active !== 'boolean') {
+        return res.status(400).json({ error: "Invalid input values" });
     }
 
-    // Insert the medicine data into the database
     const query = `
-        INSERT INTO medicine (medicine, dosage, active)
-        VALUES (?, ?, ?)
+        INSERT INTO medicine (medicine, dosage, unit, active)
+        VALUES (?, ?, ?, ?)
         ON DUPLICATE KEY UPDATE
             dosage = VALUES(dosage),
+            unit = VALUES(unit),
             active = VALUES(active);
     `;
-    const values = [medicine, dosage, active];
+    const values = [medicine.trim(), dosage, unit.trim(), active];
 
     db.query(query, values, (err, result) => {
-        if (err) {
-            console.error("Error inserting medicine:", err);
-            return res.status(500).json({ error: "Database error" });
-        }
-        res.status(200).json({ message: "Medicine added successfully", medicineId: result.insertId });
+        if (err) return res.status(500).json({ error: "Database error" });
+        res.status(200).json({ message: "Medicine added/updated successfully", medicineId: result.insertId });
     });
 });
 
-
-app.get("/notes", (req, res) => {
-    const q = "SELECT * FROM notes";
-    db.query(q, (err, data) => {
-        if (err) return res.json(err);
+// Medicine name routes
+app.get("/medicinename", (req, res) => {
+    db.query("SELECT * FROM medicinename", (err, data) => {
+        if (err) return res.status(500).json({ error: "Database error" });
         return res.json(data);
     });
 });
 
-// Create a new note
-app.post("/notes", (req, res) => {
-    const q = "INSERT INTO notes (date, type, content) VALUES (?, ?, ?)";
-    const values = [
-        req.body.date,
-        req.body.type,
-        req.body.content,
-    ];
-    
-    db.query(q, values, (err, data) => {
-        console.log("Note has been sent to database");
-        if (err) return res.json(err);
-        return res.json("Note has been created successfully");
+app.post("/medicinename", (req, res) => {
+    const { medicine } = req.body;
+
+    if (typeof medicine !== 'string' || medicine.trim() === '') {
+        return res.status(400).json({ message: "Invalid or empty medicine name" });
+    }
+
+    const query = `
+        INSERT INTO medicinename (medicine)
+        VALUES (?)
+        ON DUPLICATE KEY UPDATE medicine = VALUES(medicine);
+    `;
+    const values = [medicine.trim()];
+
+    db.query(query, values, (err, result) => {
+        if (err) return res.status(500).json({ error: "Database error" });
+        res.status(200).json({ message: "Medicine name added/updated successfully", id: result.insertId });
     });
 });
 
-// Delete a note
+// Notes routes
+app.get("/notes", (req, res) => {
+    db.query("SELECT * FROM notes", (err, data) => {
+        if (err) return res.status(500).json({ error: "Database error" });
+        return res.json(data);
+    });
+});
+
+app.post("/notes", (req, res) => {
+    const { date, type, content } = req.body;
+    const q = "INSERT INTO notes (date, type, content) VALUES (?, ?, ?)";
+    db.query(q, [date, type, content], (err, data) => {
+        if (err) return res.status(500).json({ error: "Database error" });
+        return res.status(200).json({ message: "Note has been created successfully" });
+    });
+});
+
 app.delete("/notes/:id", (req, res) => {
     const noteId = req.params.id;
-    const q = "DELETE FROM notes WHERE id = ?";
-
-    db.query(q, [noteId], (err, data) => {
-        if (err) return res.json(err);
-        return res.json("Note has been deleted successfully.");
+    db.query("DELETE FROM notes WHERE id = ?", [noteId], (err, data) => {
+        if (err) return res.status(500).json({ error: "Database error" });
+        return res.status(200).json({ message: "Note has been deleted successfully." });
     });
 });
 
-// Update a note
 app.put("/notes/:id", (req, res) => {
     const noteId = req.params.id;
-    const q = "UPDATE notes SET type = ?, content = ? WHERE id = ?";
-    const values = [
-        req.body.date,
-        req.body.type,
-        req.body.content,
-    ];
-
-    db.query(q, [...values, noteId], (err, data) => {
-        if (err) return res.json(err);
-        return res.json("Note has been updated successfully.");
+    const { date, type, content } = req.body;
+    const q = "UPDATE notes SET date = ?, type = ?, content = ? WHERE id = ?";
+    db.query(q, [date, type, content, noteId], (err, data) => {
+        if (err) return res.status(500).json({ error: "Database error" });
+        return res.status(200).json({ message: "Note has been updated successfully." });
     });
 });
 
-
-// Start server on port 8800
+// Start server
 app.listen(8800, () => {
     console.log("Backend running on http://localhost:8800");
 });
-

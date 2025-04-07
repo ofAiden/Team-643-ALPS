@@ -1,48 +1,37 @@
+// MedicineForm.jsx
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { Link } from "react-router-dom";
+import { useNavigate } from 'react-router-dom';
+
 
 const MedicineForm = () => {
-    const [medicines, setMedicines] = useState([]);
-    const [newMedicine, setNewMedicine] = useState('');
+    const [medicineOptions, setMedicineOptions] = useState([]);
     const [selectedMedicine, setSelectedMedicine] = useState('');
     const [dosage, setDosage] = useState('');
     const [unit, setUnit] = useState('Pill/Tablet');
     const [isActive, setIsActive] = useState(false);
+    const navigate = useNavigate();
 
-    // Fetch existing medicines from the backend
     useEffect(() => {
-        axios.get('http://localhost:8800/medicine')
+        axios.get('http://localhost:8800/medicinename')
             .then(response => {
-                setMedicines(response.data);
+                const data = response.data;
+                if (Array.isArray(data)) {
+                    setMedicineOptions(data); // can be an empty array and that’s fine!
+                } else {
+                    console.warn('Unexpected data format for medicine names:', data);
+                    setMedicineOptions([]); // fallback
+                }
             })
             .catch(error => {
-                console.error('There was an error fetching the medicines!', error);
+                console.error('Error fetching medicine names:', error);
+                // optional: show a friendlier message
+                alert('Could not load medicine names from server.');
             });
     }, []);
+    
 
-    // Handle adding a new medicine
-    const handleAddMedicine = () => {
-        if (newMedicine.trim()) {
-            const medicineData = {
-                medicine: newMedicine.trim(),
-                dosage: 0, // Default dosage
-                unit: 'Pill/Tablet', // Default unit
-                active: false // Default active status
-            };
-            axios.post('http://localhost:8800/medicine', medicineData)
-                .then(response => {
-                    setMedicines([...medicines, response.data]);
-                    setNewMedicine('');
-                })
-                .catch(error => {
-                    console.error('There was an error adding the medicine!', error);
-                });
-        } else {
-            alert('Please enter a valid medicine name.');
-        }
-    };
-
-    // Handle submitting the medicine management form
     const handleSubmit = (e) => {
         e.preventDefault();
         const medicineData = {
@@ -51,30 +40,20 @@ const MedicineForm = () => {
             unit,
             active: isActive,
         };
-        axios.put(`http://localhost:8800/medicine/${selectedMedicine}`, medicineData)
+
+        axios.post('http://localhost:8800/medicine', medicineData)
             .then(response => {
-                alert('Medicine data updated successfully!');
+                alert('Medicine data submitted successfully!');
             })
             .catch(error => {
-                console.error('There was an error updating the medicine data!', error);
+                console.error('Error submitting medicine data:', error);
+                alert('Failed to submit medicine data.');
             });
     };
 
     return (
         <div>
-            <h2>Add New Medicine</h2>
-            <div>
-                <input
-                    type="text"
-                    value={newMedicine}
-                    onChange={(e) => setNewMedicine(e.target.value)}
-                    placeholder="Enter medicine name"
-                />
-                <button type="button" onClick={handleAddMedicine}>
-                    Add Medicine
-                </button>
-            </div>
-
+            <button onClick={() => navigate('/add-medicine-name')}>➕ Add New Medicine Name</button>
             <h2>Manage Medicines</h2>
             <form onSubmit={handleSubmit}>
                 <div>
@@ -84,10 +63,8 @@ const MedicineForm = () => {
                         onChange={(e) => setSelectedMedicine(e.target.value)}
                         required
                     >
-                        <option value="" disabled>
-                            -- Select Medicine --
-                        </option>
-                        {medicines.map((med, index) => (
+                        <option value="" disabled>-- Select Medicine --</option>
+                        {medicineOptions.map((med, index) => (
                             <option key={index} value={med.medicine}>
                                 {med.medicine}
                             </option>
