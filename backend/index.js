@@ -70,34 +70,65 @@ app.post("/daily_log", (req, res) => {
 
 // Medicine routes
 app.get("/medicine", (req, res) => {
-    db.query("SELECT * FROM medicine", (err, data) => {
-        if (err) return res.status(500).json({ error: "Database error" });
-        return res.json(data);
+    const query = `
+        SELECT 
+            m1.medicine, 
+            m1.date AS startDate,
+            -- If no matching end date found, use today's date as the endDate
+            COALESCE(
+                (SELECT MIN(m2.date) 
+                 FROM medicine m2 
+                 WHERE m2.medicine = m1.medicine 
+                 AND m2.date > m1.date 
+                 AND m2.active = 0), 
+                CURDATE()  -- Default to today's date if no end date is found
+            ) AS endDate
+        FROM medicine m1
+        WHERE m1.active = 1
+        ORDER BY m1.medicine, m1.date;
+    `;
+
+    db.query(query, (err, results) => {
+        if (err) return res.status(500).json({ error: "DB error" });
+        return res.json(results);
     });
 });
 
-app.post("/medicine", (req, res) => {
-    const { medicine, dosage, unit, active, date } = req.body;
 
+aapp.post("/medicine", (req, res) => {
+    const { medicine, dosage, unit, active, date } = req.body;
+    console.log('Received:', { medicine, dosage, unit, active, date });
+  
+    // validation (you can keep this)
     if (typeof medicine !== 'string' || medicine.trim() === '' ||
         typeof dosage !== 'number' ||
         typeof unit !== 'string' || unit.trim() === '' ||
         typeof active !== 'boolean' ||
         typeof date !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(date)) {
-        return res.status(400).json({ error: "Invalid input values" });
+      console.warn('Validation failed');
+      return res.status(400).json({ error: "Invalid input values" });
     }
-
+  
+    // convert boolean → 0/1
+    const activeValue = active ? 1 : 0;
+  
     const query = `
-        INSERT INTO medicine (medicine, dosage, unit, active, date)
-        VALUES (?, ?, ?, ?, ?)
+      INSERT INTO medicine (medicine, dosage, unit, active, date)
+      VALUES (?, ?, ?, ?, ?)
     `;
-    const values = [medicine.trim(), dosage, unit.trim(), active, date];
-
+    const values = [medicine.trim(), dosage, unit.trim(), activeValue, date];
+  
     db.query(query, values, (err, result) => {
-        if (err) return res.status(500).json({ error: "Database error" });
-        res.status(200).json({ message: "Medicine added/updated successfully", medicineId: result.insertId });
+      if (err) {
+        console.error('SQL error inserting medicine:', err);
+        return res.status(500).json({ error: "Database error", details: err.message });
+      }
+      res.status(200).json({
+        message: "Medicine added successfully",
+        medicineId: result.insertId
+      });
     });
-});
+  });  
 
 
 // Medicine name routes
