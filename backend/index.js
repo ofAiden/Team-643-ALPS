@@ -90,11 +90,6 @@ app.post("/medicine", (req, res) => {
     const query = `
         INSERT INTO medicine (medicine, dosage, unit, active, date)
         VALUES (?, ?, ?, ?, ?)
-        ON DUPLICATE KEY UPDATE
-            dosage = VALUES(dosage),
-            unit = VALUES(unit),
-            active = VALUES(active),
-            date = VALUES(date);
     `;
     const values = [medicine.trim(), dosage, unit.trim(), active, date];
 
