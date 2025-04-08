@@ -77,30 +77,33 @@ app.get("/medicine", (req, res) => {
 });
 
 app.post("/medicine", (req, res) => {
-    const { medicine, dosage, unit, active } = req.body;
+    const { medicine, dosage, unit, active, date } = req.body;
 
     if (typeof medicine !== 'string' || medicine.trim() === '' ||
         typeof dosage !== 'number' ||
         typeof unit !== 'string' || unit.trim() === '' ||
-        typeof active !== 'boolean') {
+        typeof active !== 'boolean' ||
+        typeof date !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(date)) {
         return res.status(400).json({ error: "Invalid input values" });
     }
 
     const query = `
-        INSERT INTO medicine (medicine, dosage, unit, active)
-        VALUES (?, ?, ?, ?)
+        INSERT INTO medicine (medicine, dosage, unit, active, date)
+        VALUES (?, ?, ?, ?, ?)
         ON DUPLICATE KEY UPDATE
             dosage = VALUES(dosage),
             unit = VALUES(unit),
-            active = VALUES(active);
+            active = VALUES(active),
+            date = VALUES(date);
     `;
-    const values = [medicine.trim(), dosage, unit.trim(), active];
+    const values = [medicine.trim(), dosage, unit.trim(), active, date];
 
     db.query(query, values, (err, result) => {
         if (err) return res.status(500).json({ error: "Database error" });
         res.status(200).json({ message: "Medicine added/updated successfully", medicineId: result.insertId });
     });
 });
+
 
 // Medicine name routes
 app.get("/medicinename", (req, res) => {

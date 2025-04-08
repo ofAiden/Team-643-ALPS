@@ -1,16 +1,17 @@
-// MedicineForm.jsx
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Link } from "react-router-dom";
 import { useNavigate } from 'react-router-dom';
-
 
 const MedicineForm = () => {
     const [medicineOptions, setMedicineOptions] = useState([]);
     const [selectedMedicine, setSelectedMedicine] = useState('');
     const [dosage, setDosage] = useState('');
     const [unit, setUnit] = useState('Pill/Tablet');
-    const [isActive, setIsActive] = useState(false); //do you want to make default true
+    const [isActive, setIsActive] = useState(false);
+    const [date, setDate] = useState(
+        new Date().toLocaleDateString("en-CA", { timeZone: "America/Los_Angeles" })
+    );
+
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -18,19 +19,17 @@ const MedicineForm = () => {
             .then(response => {
                 const data = response.data;
                 if (Array.isArray(data)) {
-                    setMedicineOptions(data); // can be an empty array and that’s fine!
+                    setMedicineOptions(data);
                 } else {
                     console.warn('Unexpected data format for medicine names:', data);
-                    setMedicineOptions([]); // fallback
+                    setMedicineOptions([]);
                 }
             })
             .catch(error => {
                 console.error('Error fetching medicine names:', error);
-                // optional: show a friendlier message
                 alert('Could not load medicine names from server.');
             });
     }, []);
-    
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -39,22 +38,23 @@ const MedicineForm = () => {
             dosage: parseInt(dosage, 10),
             unit,
             active: isActive,
+            date
         };
-    
+
         axios.post('http://localhost:8800/medicine', medicineData)
             .then(response => {
                 alert('Medicine data submitted successfully!');
-                // Reset form to default values
                 setSelectedMedicine('');
                 setDosage('');
                 setUnit('Pill/Tablet');
                 setIsActive(false);
+                setDate(new Date().toLocaleDateString("en-CA", { timeZone: "America/Los_Angeles" }));
             })
             .catch(error => {
                 console.error('Error submitting medicine data:', error);
                 alert('Failed to submit medicine data.');
             });
-    };    
+    };
 
     return (
         <div>
@@ -100,10 +100,20 @@ const MedicineForm = () => {
                     </select>
                 </div>
 
-                <div class="form-check form-switch">
+                <div>
+                    <label>Date:</label>
+                    <input
+                        type="date"
+                        value={date}
+                        onChange={(e) => setDate(e.target.value)}
+                        required
+                    />
+                </div>
+
+                <div className="form-check form-switch">
                     <label>
                         <input
-                            class="form-check-input"
+                            className="form-check-input"
                             type="checkbox"
                             role="switch"
                             id="switchCheckDefault"
